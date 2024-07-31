@@ -8,6 +8,7 @@ import Sidebar from '@components/primitives/Sidebar';
 
 const Profile = () => {
   const [user, setUser] = useState<any>(null);
+  const [avatar, setAvatar] = useState<string>('');
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -18,14 +19,21 @@ const Profile = () => {
       } 
       
       else {
-        setUser(data?.user);
+        const user = data?.user;
+        setUser(user);
+
+        if (user) {
+          const { data: userData } = await supabase.from('Users').select('avatar_url').eq('auth_id', user.id).maybeSingle();
+
+          setAvatar(userData?.avatar_url ?? '');
+        }
       }
     };
 
     fetchUser();
   }, []);
 
-  if (!user) return;
+  if (!user) return null;
 
   return (
     <>
@@ -41,8 +49,11 @@ const Profile = () => {
             </Link>
           </div>
           <div className="flex flex-col items-center">
-            <Avatar sx={{ width: 56, height: 56, fontSize: "35px" }}>
-              {user.user_metadata?.first_name?.charAt(0)}
+            <Avatar
+              src={avatar}
+              sx={{ width: 56, height: 56, fontSize: "35px" }}
+            >
+              {!avatar && user.user_metadata?.first_name?.charAt(0)}
             </Avatar>
             <div className="mt-4 text-center">
               <Typography variant="h5" className="text-xl font-semibold">
@@ -69,3 +80,4 @@ const Profile = () => {
 };
 
 export default Profile;
+

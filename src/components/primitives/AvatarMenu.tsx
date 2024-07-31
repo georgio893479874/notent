@@ -11,46 +11,58 @@ import { FiLogOut } from "react-icons/fi";
 
 const AvatarMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [firstName, setFirstName] = useState<string>('');
-  const navigate = useNavigate()
+  const [user, setUser] = useState<any>(null);
+  const [avatar, setAvatar] = useState<string>('');
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const { data } = await supabase.auth.getUser();
-      const user = data?.user;
+    const fetchUserDetails = async () => {
+      try {
+        const { data, error } = await supabase.auth.getUser();
+        
+        if (error) {
+          throw error;
+          return;
+        }
 
-      if (user) {
-        setFirstName(user.user_metadata.first_name || '');
+        const user = data?.user;
+
+        if (user) {
+          setUser(user);
+
+          const { data: userData, error: fetchError } = await supabase.from('Users').select('avatar_url').eq('auth_id', user.id).maybeSingle();
+          
+          if (fetchError) {
+            throw fetchError;
+            return;
+          }
+
+          setAvatar(userData?.avatar_url ?? '');
+        } 
+        
+        else {
+          navigate('/signin');
+        }
       } 
       
-      else {
-        setFirstName('');
+      catch (error) {
+        throw error;
       }
     };
 
-    fetchUser();
-  }, []);
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      const { data } = await supabase.auth.getUser();
-
-      if (!data?.user) {
-        navigate('/');
-      }
-    };
-  
-    checkAuth();
-  }, [navigate]);  
+    fetchUserDetails();
+  }, [navigate]);
 
   const handleSignOut = async () => {
     try {
       const { error } = await supabase.auth.signOut();
 
-      if (error) throw error;
-      
-      localStorage.removeItem("userLoggedIn");
+      if (error) {
+        throw error;
+        return;
+      }
 
+      localStorage.removeItem("userLoggedIn");
       navigate("/signin");
     } 
     
@@ -58,7 +70,7 @@ const AvatarMenu = () => {
       throw error;
     }
   };
-  
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -70,8 +82,12 @@ const AvatarMenu = () => {
   return (
     <div className='fixed top-1 right-2'>
       <IconButton onClick={handleClick} size="small">
-        <Avatar className="text-black dark:text-white" sx={{ fontSize: "26px" }}>
-          {firstName[0]}
+        <Avatar 
+          src={avatar} 
+          className="text-black dark:text-white" 
+          sx={{ fontSize: "26px" }}
+        >
+          {!avatar && user?.user_metadata?.first_name?.charAt(0)}
         </Avatar>
       </IconButton>
       <Menu
@@ -105,5 +121,6 @@ const AvatarMenu = () => {
 };
 
 export default AvatarMenu;
+
 
 
