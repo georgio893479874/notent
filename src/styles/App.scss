@@ -1,0 +1,62 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  background: #ffffff;
+  color: #000000;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.dark #root {
+  background: #1a202c;
+  color: #a0aec0;
+}
+
+.dark body {
+  background: #1a202c;
+  color: #a0aec0;
+}
+
+.dark .MuiList-root {
+  background-color: #000000;
+}
+
+.dark .MuiList-root .MuiMenuItem-root {
+  color: #ffffff;
+}
+
+.MuiList-root {
+  background-color: #ffffff;
+}
+
+.MuiList-root .MuiMenuItem-root {
+  color: #000000;
+}
+
+
+
+
+ 
+
+
+
+
+

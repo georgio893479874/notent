@@ -1,0 +1,17 @@
+node_modules
+npm-debug.log
+yarn-error.log
+
+Dockerfile
+docker-compose.yml
+
+.git
+.gitignore
+
+README.md
+
+.env
+.env.local
+
+*.log
+.cache
