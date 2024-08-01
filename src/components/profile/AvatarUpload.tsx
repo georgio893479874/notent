@@ -1,17 +1,18 @@
 import { forwardRef, useEffect, useState } from 'react';
-import { IconButton, Avatar } from '@mui/material';
+import { Avatar, IconButton, Skeleton } from '@mui/material';
 import { PhotoCamera } from '@mui/icons-material';
 import { supabase } from '@/services/SupabaseClientService';
 
 interface AvatarUploadProps {
   avatar: string;
-  onAvatarChange: () => void;
-  width: number;
-  height: number;
+  onAvatarChange?: () => void;
+  width?: number;
+  height?: number;
   fontSize: number;
 }
 
-const AvatarUpload = forwardRef<HTMLInputElement, AvatarUploadProps> (({ 
+const AvatarUpload = forwardRef<HTMLInputElement, AvatarUploadProps>((
+{ 
   avatar, 
   onAvatarChange, 
   width, 
@@ -19,8 +20,7 @@ const AvatarUpload = forwardRef<HTMLInputElement, AvatarUploadProps> (({
   fontSize 
 }, ref) => {
     const [user, setUser] = useState<any>(null);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [imageLoaded, setImageLoaded] = useState<boolean>(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
       const fetchUser = async () => {
@@ -29,6 +29,7 @@ const AvatarUpload = forwardRef<HTMLInputElement, AvatarUploadProps> (({
 
           if (error) {
             throw error;
+            return;
           }
 
           setUser(data?.user);
@@ -39,67 +40,84 @@ const AvatarUpload = forwardRef<HTMLInputElement, AvatarUploadProps> (({
         } 
         
         finally {
-          setIsLoading(false);
+          setInterval(() => {
+            setLoading(false); 
+          }, 1500);
         }
       };
 
       fetchUser();
     }, []);
 
-    useEffect(() => {
-      if (avatar) {
-        const img = new Image();
-
-        img.src = avatar;
-        img.onload = () => setImageLoaded(true);
-        img.onerror = () => setImageLoaded(false);
-      } 
-      
-      else {
-        setImageLoaded(false);
-      }
-    }, [avatar]);
-
-    if (isLoading) {
-      return;
+    if (loading) {
+      return (
+        <div className="relative">
+          <Skeleton variant="circular" width={width} height={height}>
+            <Avatar sx={{ width, height, fontSize }}>
+            </Avatar>
+          </Skeleton>
+          {onAvatarChange && (
+            <IconButton
+              color="primary"
+              component="label"
+              sx={{
+                position: 'absolute',
+                bottom: 0,
+                right: 0,
+                bgcolor: 'white',
+                '&:hover': {
+                  bgcolor: 'grey.300',
+                },
+              }}
+            >
+              <input
+                type="file"
+                hidden
+                ref={ref}
+                onChange={onAvatarChange}
+              />
+              <PhotoCamera />
+            </IconButton>
+          )}
+        </div>
+      );
     }
-
-    if (!user || !imageLoaded) return null;
 
     return (
       <div className="relative">
-        <Avatar
-          src={avatar}
-          sx={{ width: width, height: height, fontSize: fontSize }}
-        >
+        <Avatar src={avatar} sx={{ width, height, fontSize }}>
           {user.user_metadata?.first_name?.charAt(0)}
         </Avatar>
-        <IconButton
-          color="primary"
-          component="label"
-          sx={{
-            position: 'absolute',
-            bottom: 0,
-            right: 0,
-            bgcolor: 'white',
-            '&:hover': {
-              bgcolor: 'grey.300',
-            },
-          }}
-        >
-          <input
-            type="file"
-            hidden
-            ref={ref}
-            onChange={onAvatarChange}
-          />
-          <PhotoCamera />
-        </IconButton>
+        {onAvatarChange && (
+          <IconButton
+            color="primary"
+            component="label"
+            sx={{
+              position: 'absolute',
+              bottom: 0,
+              right: 0,
+              bgcolor: 'white',
+              '&:hover': {
+                bgcolor: 'grey.300',
+              },
+            }}
+          >
+            <input
+              type="file"
+              hidden
+              ref={ref}
+              onChange={onAvatarChange}
+            />
+            <PhotoCamera />
+          </IconButton>
+        )}
       </div>
     );
   }
 );
 
 export default AvatarUpload;
+
+
 
 

@@ -10,29 +10,29 @@ interface IAuthService {
 export const handleSignUp = async ({ name, email, password }: IAuthService) => {
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = supabase.auth.getUser();
-    const id = (await user).data.user?.id;
 
-    const { error: authError } = await supabase.auth.signUp({
+    const { data: signUpData, error: authError } = await supabase.auth.signUp({
       password,
       email,
       options: {
         data: {
           first_name: name,
         },
-      }
+      },
     });
 
     if (authError) {
       throw authError;
     }
 
+    const userId = signUpData.user?.id;
+
     const { error: insertError } = await supabase.from('Users').insert([
       {
         name,
         email,
         password: hashedPassword,
-        auth_id: id,
+        auth_id: userId,
       },
     ]);
 
@@ -74,9 +74,11 @@ export const handleSignOut = async () => {
     if (error) {
       throw error;
     }
-  }
 
+    return { error: null };
+  } 
+  
   catch (error: any) {
     return { error: error.message || error };
   }
-}
+};

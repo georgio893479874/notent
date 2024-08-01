@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Avatar from '@mui/material/Avatar';
+import UserAvatar from '../profile/UserAvatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
@@ -82,13 +82,12 @@ const AvatarMenu = () => {
     <div className='fixed top-1 right-2'>
       <IconButton onClick={handleClick} size="small">
         {!isLoading && (
-          <Avatar
+          <UserAvatar
             src={avatar}
-            className="text-black dark:text-white" 
-            sx={{ fontSize: "26px" }}
-          >
-            {user.user_metadata?.first_name?.charAt(0)}
-          </Avatar>
+            initials={user.user_metadata?.first_name?.charAt(0)}
+            size={40}
+            fontSize={20}
+          />
         )}
       </IconButton>
       <Menu
@@ -122,6 +121,7 @@ const AvatarMenu = () => {
 };
 
 export default AvatarMenu;
+
 
 
 

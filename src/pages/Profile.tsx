@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Avatar, Typography } from '@mui/material';
+import UserAvatar from '../components/profile/UserAvatar'; 
+import { Typography } from '@mui/material';
 import { supabase } from '@services/SupabaseClientService';
 import { Link } from 'react-router-dom';
 import { IoArrowBackOutline } from "react-icons/io5";
@@ -52,12 +53,12 @@ const Profile = () => {
           </div>
           <div className="flex flex-col items-center">
             {!isLoading && (
-              <Avatar
+              <UserAvatar
                 src={avatar}
-                sx={{ width: 110, height: 110, fontSize: 35 }}
-              >
-                {user.user_metadata?.first_name?.charAt(0)}
-              </Avatar>
+                initials={user.user_metadata?.first_name?.charAt(0)}
+                size={110}
+                fontSize={45}
+              />
             )}
             <div className="mt-4 text-center">
               <Typography variant="h5" className="text-xl font-semibold">
@@ -84,5 +85,6 @@ const Profile = () => {
 };
 
 export default Profile;
+
 
 
