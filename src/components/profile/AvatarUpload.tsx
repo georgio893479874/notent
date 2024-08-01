@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useState } from 'react';
-import { Avatar, IconButton } from '@mui/material';
+import { IconButton, Avatar } from '@mui/material';
 import { PhotoCamera } from '@mui/icons-material';
 import { supabase } from '@/services/SupabaseClientService';
 
@@ -11,36 +11,67 @@ interface AvatarUploadProps {
   fontSize: number;
 }
 
-const AvatarUpload = forwardRef<HTMLInputElement, AvatarUploadProps>(({ 
+const AvatarUpload = forwardRef<HTMLInputElement, AvatarUploadProps> (({ 
   avatar, 
   onAvatarChange, 
-  width,
-  height,
-  fontSize
+  width, 
+  height, 
+  fontSize 
 }, ref) => {
-  const [user, setUser] = useState<any>(null);
+    const [user, setUser] = useState<any>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [imageLoaded, setImageLoaded] = useState<boolean>(false);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const { data, error } = await supabase.auth.getUser();
+    useEffect(() => {
+      const fetchUser = async () => {
+        try {
+          const { data, error } = await supabase.auth.getUser();
 
-      if (error) {
-        throw error;
+          if (error) {
+            throw error;
+          }
+
+          setUser(data?.user);
+        } 
+        
+        catch (error) {
+          throw error;
+        } 
+        
+        finally {
+          setIsLoading(false);
+        }
+      };
+
+      fetchUser();
+    }, []);
+
+    useEffect(() => {
+      if (avatar) {
+        const img = new Image();
+
+        img.src = avatar;
+        img.onload = () => setImageLoaded(true);
+        img.onerror = () => setImageLoaded(false);
       } 
       
       else {
-        setUser(data?.user);
+        setImageLoaded(false);
       }
-    };
+    }, [avatar]);
 
-    fetchUser();
-  }, []);
+    if (isLoading) {
+      return;
+    }
 
-  if (!user) return;
+    if (!user || !imageLoaded) return null;
 
     return (
       <div className="relative">
-        <Avatar src={avatar} sx={{ width: width, height: height, fontSize: fontSize }}>
+        <Avatar
+          src={avatar}
+          sx={{ width: width, height: height, fontSize: fontSize }}
+        >
           {user.user_metadata?.first_name?.charAt(0)}
         </Avatar>
         <IconButton
@@ -62,7 +93,7 @@ const AvatarUpload = forwardRef<HTMLInputElement, AvatarUploadProps>(({
             ref={ref}
             onChange={onAvatarChange}
           />
-          <PhotoCamera/>
+          <PhotoCamera />
         </IconButton>
       </div>
     );
@@ -70,3 +101,5 @@ const AvatarUpload = forwardRef<HTMLInputElement, AvatarUploadProps>(({
 );
 
 export default AvatarUpload;
+
+

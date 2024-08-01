@@ -13,6 +13,7 @@ const AvatarMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [user, setUser] = useState<any>(null);
   const [avatar, setAvatar] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,7 +23,6 @@ const AvatarMenu = () => {
         
         if (error) {
           throw error;
-          return;
         }
 
         const user = data?.user;
@@ -34,10 +34,10 @@ const AvatarMenu = () => {
           
           if (fetchError) {
             throw fetchError;
-            return;
           }
 
           setAvatar(userData?.avatar_url ?? '');
+          setIsLoading(false);
         } 
         
         else {
@@ -59,7 +59,6 @@ const AvatarMenu = () => {
 
       if (error) {
         throw error;
-        return;
       }
 
       localStorage.removeItem("userLoggedIn");
@@ -82,13 +81,15 @@ const AvatarMenu = () => {
   return (
     <div className='fixed top-1 right-2'>
       <IconButton onClick={handleClick} size="small">
-        <Avatar 
-          src={avatar} 
-          className="text-black dark:text-white" 
-          sx={{ fontSize: "26px" }}
-        >
-          {!avatar && user?.user_metadata?.first_name?.charAt(0)}
-        </Avatar>
+        {!isLoading && (
+          <Avatar
+            src={avatar}
+            className="text-black dark:text-white" 
+            sx={{ fontSize: "26px" }}
+          >
+            {user.user_metadata?.first_name?.charAt(0)}
+          </Avatar>
+        )}
       </IconButton>
       <Menu
         anchorEl={anchorEl}
@@ -121,6 +122,7 @@ const AvatarMenu = () => {
 };
 
 export default AvatarMenu;
+
 
 
 

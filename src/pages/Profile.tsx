@@ -9,6 +9,7 @@ import Sidebar from '@components/primitives/Sidebar';
 const Profile = () => {
   const [user, setUser] = useState<any>(null);
   const [avatar, setAvatar] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -26,6 +27,7 @@ const Profile = () => {
           const { data: userData } = await supabase.from('Users').select('avatar_url').eq('auth_id', user.id).maybeSingle();
 
           setAvatar(userData?.avatar_url ?? '');
+          setIsLoading(false);
         }
       }
     };
@@ -40,7 +42,7 @@ const Profile = () => {
       <Sidebar />
       <div className="flex flex-col items-center justify-center flex-1"> 
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 w-full max-w-md">
-          <div className="flex items-start justify-between mb-6">
+          <div className="fixed items-start justify-between mb-6">
             <Link
               to="/"
               className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full shadow-md flex items-center justify-center"
@@ -49,12 +51,14 @@ const Profile = () => {
             </Link>
           </div>
           <div className="flex flex-col items-center">
-            <Avatar
-              src={avatar}
-              sx={{ width: 56, height: 56, fontSize: "35px" }}
-            >
-              {!avatar && user.user_metadata?.first_name?.charAt(0)}
-            </Avatar>
+            {!isLoading && (
+              <Avatar
+                src={avatar}
+                sx={{ width: 110, height: 110, fontSize: 35 }}
+              >
+                {user.user_metadata?.first_name?.charAt(0)}
+              </Avatar>
+            )}
             <div className="mt-4 text-center">
               <Typography variant="h5" className="text-xl font-semibold">
                 {user.user_metadata?.first_name} {user.user_metadata?.last_name}
@@ -80,4 +84,5 @@ const Profile = () => {
 };
 
 export default Profile;
+
 
