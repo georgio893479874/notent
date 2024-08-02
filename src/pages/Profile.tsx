@@ -5,7 +5,7 @@ import { supabase } from '@services/SupabaseClientService';
 import { Link } from 'react-router-dom';
 import { IoArrowBackOutline } from "react-icons/io5";
 import { BsPenFill } from "react-icons/bs";
-import Sidebar from '@components/primitives/Sidebar';
+import Sidebar from '@/components/primitives/Sidebar';
 
 const Profile = () => {
   const [user, setUser] = useState<any>(null);

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Skeleton } from "../ui/skeleton";
-import DropdownMenu from "../primitives/DropdownMenu";
+import DropdownMenu from "./DropdownMenu";
 
 interface ISongProps {
   article: string;
@@ -46,7 +46,7 @@ const Song: React.FC<ISongProps> = ({
             <h3 className="text-lg font-semibold">{article}</h3>
             <p className="text-gray-600">{author}</p>
           </div>
-          <DropdownMenu article={article} />
+          <DropdownMenu article={article}/>
         </div>
       )}
     </>

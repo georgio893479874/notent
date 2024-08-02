@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@services/SupabaseClientService";
-import Sidebar from "@components/primitives/Sidebar";
+import Sidebar from "@/components/primitives/Sidebar";
 
 const Settings = () => {
     const [darkMode, setDarkMode] = useState(() => {

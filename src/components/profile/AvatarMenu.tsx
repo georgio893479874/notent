@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import UserAvatar from '../profile/UserAvatar';
+import UserAvatar from './UserAvatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';

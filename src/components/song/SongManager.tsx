@@ -1,6 +1,6 @@
 import { useState } from "react";
-import CreateSong from "./CreateSong";
-import FileUpload from "./FileUpload";
+import CreateSong from "../songManager/CreateSong";
+import FileUpload from "../songManager/FileUpload";
 
 const SongManager = () => {
   const [fileUrl, setFileUrl] = useState("");

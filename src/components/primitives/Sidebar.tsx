@@ -2,7 +2,7 @@ import { MdHomeFilled, MdSearch } from "react-icons/md";
 import { IoLibrary } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import CreateSong from "../song/CreateSong";
+import CreateSong from "../songManager/CreateSong";
 
 const Sidebar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

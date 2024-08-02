@@ -65,8 +65,8 @@ const EditProfile = () => {
       return;
     }
 
-    const fileName = userData.user.id;
-    const { error: uploadError } = await supabase.storage.from('Avatars').upload(fileName, file, { upsert: true });
+    const fileName = `${Date.now()}_${file.name}_${userData.user.id}`;
+    const { error: uploadError } = await supabase.storage.from('Avatars').upload(fileName, file);
 
     if (uploadError) {
       throw uploadError;

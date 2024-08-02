@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { CircularProgress, Typography } from '@mui/material';
 import TextFieldWithIcon from './TextFieldWithIcon';
 import { Link } from 'react-router-dom';
 import FormContainer from './FormContainer';
@@ -65,7 +65,7 @@ const AuthForm: React.FC<IAuthForm> = ({
           type="submit" 
           className="w-full bg-blue-500 text-white py-2 rounded-md"
         >
-          {loading ? "Loading..." : isSignUp ? "Sign Up" : "Sign In"}
+          {loading ? <CircularProgress/> : isSignUp ? "Sign Up" : "Sign In"}
         </button>
         <Typography variant="body2" className="text-center text-gray-600 pt-2">
           {isSignUp ? "Do You Have An Account?" : "Don't Have An Account?"} <Link to={isSignUp ? "/signin" : "/register"} className="link">{isSignUp ? "Sign In" : "Register"}</Link>

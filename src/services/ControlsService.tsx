@@ -72,12 +72,16 @@ const useControlsService = ({ songs, currentSongIndex, setCurrentSongIndex }: IC
             });
     
             navigator.mediaSession.setActionHandler('previoustrack', () => {
+                audio.currentTime = 0;
+                
                 if (currentSongIndex > 0) {
                     setCurrentSongIndex(currentSongIndex - 1);
                 }
             });
     
             navigator.mediaSession.setActionHandler('nexttrack', () => {
+                audio.currentTime = 0;
+
                 if (currentSongIndex < songs.length - 1) {
                     setCurrentSongIndex(currentSongIndex + 1);
                 }

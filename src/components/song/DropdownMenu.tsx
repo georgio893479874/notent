@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { FaPen, FaTrash } from "react-icons/fa";
-import EditSong from "../song/EditSong";
+import EditSong from "../songManager/EditSong";
 import { supabase } from "@services/SupabaseClientService";
 
 const DropdownMenu = ({ article }: { article: string }) => {
