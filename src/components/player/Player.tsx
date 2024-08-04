@@ -4,11 +4,13 @@ import { supabase } from "@/services/SupabaseClientService";
 import Controls from "./Controls";
 import Song from "../song/Song";
 import { CircularProgress } from "@mui/material";
+import SongInfoModal from "../song/SongInfoModal";
 
 const Player = () => {
   const [songs, setSongs] = useState<ISong[]>([]);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     fetchSongs();
@@ -31,8 +33,9 @@ const Player = () => {
     setLoading(false);
   };
 
-  const handleSongClick = (index: any) => {
+  const handleSongClick = (index: number) => {
     setCurrentSongIndex(index);
+    setIsModalOpen(true);
   };
 
   const {
@@ -52,12 +55,12 @@ const Player = () => {
   return (
     <div className="flex flex-col items-center justify-center p-4">
       {loading ? (
-        <CircularProgress/>
+        <CircularProgress />
       ) : songs.length > 0 ? (
         <div className="flex flex-col gap-4 mb-4 w-full max-w-lg">
           {songs.map((song, index) => (
             <div
-              key={index}
+              key={song.id}
               onClick={() => handleSongClick(index)}
               className="cursor-pointer p-2 border rounded-lg shadow-md"
             >
@@ -66,7 +69,7 @@ const Player = () => {
           ))}
         </div>
       ) : (
-        <p>There Is Nothing Here Yet</p>
+        <p>There Are No Songs Here Yet</p>
       )}
       <Controls
         type="range"
@@ -83,9 +86,16 @@ const Player = () => {
         current={currentFormatted}
         duration={durationFormatted}
       />
+      {isModalOpen && (
+        <SongInfoModal 
+          song={songs[currentSongIndex]} 
+          onClose={() => setIsModalOpen(false)} 
+        />
+      )}
     </div>
   );
 };
 
 export default Player;
+
 

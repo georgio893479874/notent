@@ -24,10 +24,10 @@ const Search = () => {
     setSongs(data || []);
   };
 
-  const filteredSongs = songs.filter(song => 
+  const filteredSongs = songs.filter((song) => {
     song.article.toLowerCase().includes(query.toLowerCase()) || 
     song.author.toLowerCase().includes(query.toLowerCase())
-  );
+  });
 
   return (
     <div className="flex">

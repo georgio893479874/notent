@@ -10,6 +10,7 @@ import Profile from '@pages/Profile';
 import Settings from '@pages/Settings';
 import Search from "@pages/Search";
 import EditProfile from '@pages/EditProfile';
+import SongMenu from './components/song/SongInfoModal';
 
 function App() {
   useEffect(() => {
@@ -37,6 +38,7 @@ function App() {
             <Route path="/search" element={<Search/>}/>
             <Route path="/settings" element={<Settings/>}/>
             <Route path="/editprofile" element={<EditProfile/>}/>
+            <Route path='/e' element={<SongMenu/>}/>
           </Routes>
         </AuthWrapper>
       </div>
