@@ -46,7 +46,9 @@ const Song: React.FC<ISongProps> = ({
             <h3 className="text-lg font-semibold">{article}</h3>
             <p className="text-gray-600">{author}</p>
           </div>
-          <DropdownMenu article={article}/>
+          <div onClick={(e) => { e.stopPropagation() }}>
+            <DropdownMenu article={article}/>
+          </div>
         </div>
       )}
     </>

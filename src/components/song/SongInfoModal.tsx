@@ -1,4 +1,11 @@
-const SongInfoModal = ({ song, onClose }: any) => {
+import { ISong } from "@/services/ControlsService";
+
+interface ISongInfoModal {
+  song: ISong;
+  onClose: () => void;
+}
+
+const SongInfoModal = ({ song, onClose }: ISongInfoModal) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
       <div className="bg-white rounded-lg shadow-lg p-6 w-80">
@@ -12,3 +19,4 @@ const SongInfoModal = ({ song, onClose }: any) => {
 };
 
 export default SongInfoModal;
+
