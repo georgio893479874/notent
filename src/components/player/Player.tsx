@@ -36,8 +36,9 @@ const Player = () => {
   const handleSongClick = (index: number) => {
     setCurrentSongIndex(index);
     setIsModalOpen(true);
+    togglePlayPause();
   };
-
+  
   const {
     isPlaying,
     currentTime,
@@ -53,46 +54,48 @@ const Player = () => {
   } = useControlsService({ songs, currentSongIndex, setCurrentSongIndex });
 
   return (
-    <div className="flex flex-col items-center justify-center p-4">
-      {loading ? (
-        <CircularProgress />
-      ) : songs.length > 0 ? (
-        <div className="flex flex-col gap-4 mb-4 w-full max-w-lg">
-          {songs.map((song, index) => (
-            <div
-              key={song.id}
-              onClick={() => handleSongClick(index)}
-              className="cursor-pointer p-2 border rounded-lg shadow-md"
-            >
-              <Song {...song} onSongClick={() => handleSongClick(index)}/>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <p>There Are No Songs Here Yet</p>
-      )}
-      <Controls
-        type="range"
-        min={0}
-        max={duration}
-        value={currentTime}
-        onChange={handleProgressChange}
-        progressBar={progressBar}
-        audioPlayer={audioPlayer}
-        isPlaying={isPlaying}
-        skipBegin={skipBegin}
-        skipEnd={skipEnd}
-        togglePlayPause={togglePlayPause}
-        current={currentFormatted}
-        duration={durationFormatted}
-      />
-      {isModalOpen && (
-        <SongInfoModal 
-          song={songs[currentSongIndex]} 
-          onClose={() => setIsModalOpen(false)} 
+      <div className="flex flex-col items-center justify-center p-4">
+        {loading ? (
+          <CircularProgress />
+        ) : songs.length > 0 ? (
+          <div className="flex flex-col gap-4 mb-4 w-full max-w-lg">
+            {songs.map((song, index) => (
+              <div
+                key={song.id}
+                onClick={() => handleSongClick(index)}
+                className="cursor-pointer p-2 border rounded-lg shadow-md"
+              >
+                <Song {...song} onSongClick={() => handleSongClick(index)}/>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p>There Are No Songs Here Yet</p>
+        )}
+        <Controls
+          type="range"
+          min={0}
+          max={duration}
+          value={currentTime}
+          onChange={handleProgressChange}
+          progressBar={progressBar}
+          audioPlayer={audioPlayer}
+          isPlaying={isPlaying}
+          skipBegin={skipBegin}
+          skipEnd={skipEnd}
+          togglePlayPause={togglePlayPause}
+          current={currentFormatted}
+          duration={durationFormatted}
         />
-      )}
-    </div>
+        {isModalOpen && (
+          <SongInfoModal 
+            song={songs[currentSongIndex]} 
+            onClose={() => setIsModalOpen(false)} 
+            onPlayPause={togglePlayPause}
+            isPlaying={isPlaying}
+          />
+        )}
+      </div>
   );
 };
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Skeleton } from "../ui/skeleton";
 import DropdownMenu from "./DropdownMenu";
 
@@ -56,4 +56,3 @@ const Song: React.FC<ISongProps> = ({
 };
 
 export default Song;
-
