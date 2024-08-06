@@ -7,7 +7,7 @@ interface IControlsService {
 }
 
 export interface ISong {
-    duration: ReactNode;
+    duration: string;
     id: number;
     created_at: string;
     audio_link: string;
