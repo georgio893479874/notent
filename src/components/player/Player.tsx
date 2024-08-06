@@ -93,6 +93,15 @@ const Player = () => {
             onClose={() => setIsModalOpen(false)} 
             onPlayPause={togglePlayPause}
             isPlaying={isPlaying}
+            type="range"
+            min={0}
+            max={duration}
+            skipBegin={skipBegin}
+            skipEnd={skipEnd}
+            value={currentTime}
+            onChange={handleProgressChange}
+            progressBar={progressBar}
+            current={currentFormatted}
           />
         )}
       </div>
