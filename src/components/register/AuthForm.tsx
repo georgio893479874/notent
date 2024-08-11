@@ -2,20 +2,7 @@ import { CircularProgress, Typography } from '@mui/material';
 import TextFieldWithIcon from './TextFieldWithIcon';
 import { Link } from 'react-router-dom';
 import FormContainer from './FormContainer';
-
-interface IAuthForm {
-  title: string;
-  subtitle: string;
-  isSignUp: boolean;
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
-  loading: boolean;
-  error: string | null;
-  showPassword: boolean;
-  handleClickShowPassword: () => void;
-  setEmail: React.Dispatch<React.SetStateAction<string>>;
-  setPassword: React.Dispatch<React.SetStateAction<string>>;
-  setName?: React.Dispatch<React.SetStateAction<string>> | undefined;
-}
+import { IAuthForm } from '@/interfaces/AuthFormInterface';
 
 const AuthForm: React.FC<IAuthForm> = ({ 
   title, 

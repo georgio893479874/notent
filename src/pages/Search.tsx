@@ -1,6 +1,6 @@
 import { ISong } from "@/services/ControlsService";
 import { supabase } from "@/services/SupabaseClientService";
-import Sidebar from "@/components/primitives/Sidebar";
+import Sidebar from "@/components/sidebar/Sidebar";
 import { useEffect, useState } from "react";
 
 const Search = () => {

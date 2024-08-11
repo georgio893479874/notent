@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './styles/App.scss';
-import KeepAliveComponent from '@components/primitives/KeepAliveComponent';
+import KeepAliveComponent from '@components/keepAlive/KeepAlive';
 import AuthWrapper from '@components/register/AuthWrapper';
 import Register from '@pages/Register';
 import SignIn from '@pages/SignIn';

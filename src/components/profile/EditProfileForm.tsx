@@ -1,17 +1,7 @@
-import React, { forwardRef } from 'react';
-import Sidebar from '../primitives/Sidebar';
+import { forwardRef } from 'react';
+import Sidebar from '../sidebar/Sidebar';
 import AvatarUpload from './AvatarUpload';
-
-interface IEditProfileForm {
-  handleChangeName: (e: React.FormEvent) => Promise<void>;
-  handleChangeEmail: (e: React.FormEvent) => Promise<void>;
-  name: string;
-  email: string;
-  setName: (value: React.SetStateAction<string>) => void;
-  setEmail: (value: React.SetStateAction<string>) => void;
-  avatar: string;
-  handleAvatarChange: () => void;
-}
+import { IEditProfileForm } from '@/interfaces/EditProfileInterface';
 
 const EditProfileForm = forwardRef<HTMLInputElement, IEditProfileForm> (
   (

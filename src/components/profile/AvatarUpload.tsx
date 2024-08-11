@@ -2,14 +2,7 @@ import { forwardRef, useEffect, useState } from 'react';
 import { Avatar, IconButton, Skeleton } from '@mui/material';
 import { PhotoCamera } from '@mui/icons-material';
 import { supabase } from '@/services/SupabaseClientService';
-
-interface AvatarUploadProps {
-  avatar: string;
-  onAvatarChange?: () => void;
-  width?: number;
-  height?: number;
-  fontSize: number;
-}
+import { AvatarUploadProps } from '@/interfaces/AvatarUploadInterface';
 
 const AvatarUpload = forwardRef<HTMLInputElement, AvatarUploadProps>((
 { 

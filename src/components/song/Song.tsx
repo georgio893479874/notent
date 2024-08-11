@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Skeleton } from "../ui/skeleton";
 import DropdownMenu from "./DropdownMenu";
 
-interface ISongProps {
+interface ISong {
   article: string;
   author: string;
   image_link: string;
@@ -10,7 +10,7 @@ interface ISongProps {
   onSongClick: () => void;
 }
 
-const Song: React.FC<ISongProps> = ({
+const Song: React.FC<ISong> = ({
   article,
   author,
   image_link,

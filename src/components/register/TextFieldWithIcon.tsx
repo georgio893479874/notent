@@ -1,13 +1,5 @@
+import { ITextFieldWithIcon } from '@/interfaces/TextFieldWidthIcon';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-
-interface ITextFieldWithIcon {
-  content: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  type: string;
-  handleClickShowPassword?: () => void;
-  showPassword?: boolean;
-  required?: boolean;
-}
 
 const TextFieldWithIcon: React.FC<ITextFieldWithIcon> = ({ 
   content, 

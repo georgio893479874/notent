@@ -1,5 +1,5 @@
 import AvatarMenu from "@components/profile/AvatarMenu";
-import Sidebar from "@/components/primitives/Sidebar";
+import Sidebar from "@/components/sidebar/Sidebar";
 import Player from "@components/player/Player";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
