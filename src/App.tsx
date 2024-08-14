@@ -10,6 +10,7 @@ import Profile from '@pages/Profile';
 import Settings from '@pages/Settings';
 import Search from "@pages/Search";
 import EditProfile from '@pages/EditProfile';
+import Portfolio from './pages/Portfolio';
 
 function App() {
   useEffect(() => {
@@ -30,9 +31,10 @@ function App() {
         <KeepAliveComponent/>
         <AuthWrapper>
           <Routes>
+            <Route path="/" element={<Portfolio/>}/>
             <Route path="/register" element={<Register/>}/>
             <Route path="/signin" element={<SignIn/>}/>
-            <Route path="/" element={<DefaultRoutes/>}/>
+            <Route path="/player" element={<DefaultRoutes/>}/>
             <Route path="/profile" element={<Profile/>}/>
             <Route path="/search" element={<Search/>}/>
             <Route path="/settings" element={<Settings/>}/>

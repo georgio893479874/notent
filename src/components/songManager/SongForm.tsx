@@ -1,19 +1,5 @@
+import { ISongForm } from "@/interfaces/SongFormInterface";
 import FileUpload from "./FileUpload";
-
-interface ISongForm {
-    title: string;
-    handle: (e: React.FormEvent) => Promise<void>;
-    article: string;
-    author: string;
-    songUrl: string;
-    imageUrl: string;
-    setArticle: (value: React.SetStateAction<string>) => void;
-    setAuthor: (value: React.SetStateAction<string>) => void;
-    setSongUrl: (value: React.SetStateAction<string>) => void;
-    setImageUrl: (value: React.SetStateAction<string>) => void;
-    onClose: () => void;
-    buttonContent: string;
-}
 
 const SongForm: React.FC<ISongForm> = ({ 
     title,
@@ -43,8 +29,8 @@ const SongForm: React.FC<ISongForm> = ({
           onChange={(e) => setAuthor(e.target.value)}
           className="p-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm mb-4 w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
-        <FileUpload setFileUrl={setSongUrl} inputContent="Audio URL"/>
-        <FileUpload setFileUrl={setImageUrl} inputContent="Image URL"/>
+        <FileUpload setFileUrl={setSongUrl} inputContent="Add Audio"/>
+        <FileUpload setFileUrl={setImageUrl} inputContent="Add Image"/>
         <button
           type="submit"
           className="mt-2 p-3 bg-blue-600 text-white rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 w-full"

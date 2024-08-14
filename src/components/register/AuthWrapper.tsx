@@ -13,8 +13,8 @@ const AuthWrapper = ({ children }: { children: JSX.Element }) => {
       const { data } = await supabase.auth.getUser();
       
       if (!data?.user) {
-        if (location.pathname !== '/register' && location.pathname !== '/signin') {
-          navigate('/signin');
+        if (location.pathname !== '/register' && location.pathname !== '/signin' && location.pathname !== '/') {
+          navigate('/');
         }
       }
 
