@@ -1,14 +1,16 @@
 import Footer from "@/components/portfolio/Footer";
 import Header from "@/components/portfolio/Header";
 import TrendingArtists from "@/components/portfolio/TrendingArtists";
-import MusicLibraries from "@/components/portfolio/MusicLibraries";
 import FeaturedArtist from "@/components/portfolio/FeaturedArtist";
+import FeaturedPlaylists from "@/components/portfolio/FeaturedPlaylist";
+import Hero from "@/components/portfolio/Hero";
 
 const Portfolio = () => {
   return (
     <>
         <Header/>
-        <MusicLibraries/>
+        <Hero/>
+        <FeaturedPlaylists/>
         <TrendingArtists/>
         <FeaturedArtist/>
         <Footer/>

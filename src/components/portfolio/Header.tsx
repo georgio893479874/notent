@@ -10,7 +10,7 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-black p-4 flex justify-between items-center">
+    <header className="bg-gray-950 p-4 flex justify-between items-center">
       <h1 className="text-white text-2xl">Notent</h1>
       <nav className="hidden md:flex gap-4">
         <a href="#features" className="text-white">Home</a>
@@ -32,12 +32,12 @@ const Header = () => {
         <a href="#pricing" className="text-white py-4 text-lg" onClick={toggleMenu}>Pricing</a>
         <div className="gap-6 flex">
             <button className="bg-pink-500 text-white px-4 py-2 rounded"><Link to="/signin">Login</Link></button>
-            <button className="bg-pink-500 text-white px-4 py-2 rounded"><Link to="/signup">Sign Up</Link></button>
+            <button className="bg-pink-500 text-white px-4 py-2 rounded"><Link to="/register">Sign Up</Link></button>
         </div>
       </nav>
       <div className="hidden md:flex gap-4">
         <button className="text-white"><Link to="/signin">Login</Link></button>
-        <button className="bg-pink-500 text-white px-4 py-2 rounded"><Link to="/signup">Sign Up</Link></button>
+        <button className="bg-pink-500 text-white px-4 py-2 rounded"><Link to="/register">Sign Up</Link></button>
       </div>
     </header>
   );

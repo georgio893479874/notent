@@ -1,6 +1,6 @@
 import { useState } from "react";
 import AuthForm from "@components/register/AuthForm";
-import { handleSignUp } from "@services/authService";
+import { handleSignIn, handleSignUp } from "@services/authService";
 import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
@@ -36,7 +36,9 @@ const Register = () => {
     finally {
       setLoading(false);
 
-      navigate("/signin");
+      await handleSignIn({ email, password });
+
+      navigate("/player");
     }
   };
 

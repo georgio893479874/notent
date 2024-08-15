@@ -25,7 +25,7 @@ const SignIn = () => {
   
       localStorage.setItem("userLoggedIn", "true");
       
-      navigate("/");
+      navigate("/player");
     } 
     
     catch (error: any) {
