@@ -7,14 +7,12 @@ const Register = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const signUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true);
     setError(null);
 
     try {
@@ -34,8 +32,6 @@ const Register = () => {
     } 
     
     finally {
-      setLoading(false);
-
       await handleSignIn({ email, password });
 
       navigate("/player");
@@ -48,11 +44,10 @@ const Register = () => {
 
   return (
     <AuthForm
-      title="Register"
-      subtitle="If You Need Any Support Click Here"
+      title="Register New Account"
+      buttonContent="Register"
       isSignUp={true}
       onSubmit={signUp}
-      loading={loading}
       error={error}
       showPassword={showPassword}
       handleClickShowPassword={handleClickShowPassword}

@@ -1,9 +1,8 @@
 interface IAuthForm {
     title: string;
-    subtitle: string;
+    buttonContent: string,
     isSignUp: boolean;
     onSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
-    loading: boolean;
     error: string | null;
     showPassword: boolean;
     handleClickShowPassword: () => void;

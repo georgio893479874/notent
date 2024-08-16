@@ -6,14 +6,12 @@ import { useNavigate } from "react-router-dom";
 const SignIn = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const signIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true);
     setError(null);
   
     try {
@@ -31,10 +29,6 @@ const SignIn = () => {
     catch (error: any) {
       setError(error.message || error);
     } 
-    
-    finally {
-      setLoading(false);
-    }
   };  
 
   const handleClickShowPassword = () => {
@@ -43,11 +37,10 @@ const SignIn = () => {
 
   return (
     <AuthForm
-      title="Sign In"
-      subtitle="If You Need Any Support Click Here"
+      title="Sign Into Your Account"
+      buttonContent="Login"
       isSignUp={false}
       onSubmit={signIn}
-      loading={loading}
       error={error}
       showPassword={showPassword}
       handleClickShowPassword={handleClickShowPassword}
