@@ -103,14 +103,17 @@
   }
 }
 
-@media (max-width: 640px) {
-  .custom-checkbox-container {
-    flex-direction: column;
+@media (max-width: 1280px) {
+  .relative {
+    position: relative;
   }
 
   .forgot-password-link {
-    text-align: right;
-    margin-top: 0.5rem; 
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-top: 0;
   }
 }
 

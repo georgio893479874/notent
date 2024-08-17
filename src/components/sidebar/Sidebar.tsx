@@ -41,14 +41,13 @@ const Sidebar = () => {
           </div>
         </nav>
       </div>
-      
       <div className="fixed bottom-0 left-0 w-full dark:bg-gray-800 bg-white md:hidden z-40">
         <nav className="flex justify-around p-2">
           <Link
             to="/"
             className="flex flex-col items-center text-gray-400"
           >
-            <MdHomeFilled size={24} />
+            <MdHomeFilled size={24}/>
             <span className="text-xs">Home</span>
           </Link>
           <Link
@@ -62,12 +61,11 @@ const Sidebar = () => {
             onClick={openModal}
             className="flex flex-col items-center text-gray-400"
           >
-            <IoLibrary size={24} />
+            <IoLibrary size={24}/>
             <span className="text-xs">Create</span>
           </button>
         </nav>
       </div>
-
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <CreateSong onClose={closeModal} />
