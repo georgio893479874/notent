@@ -74,6 +74,7 @@ const Player = () => {
         )}
         <Controls
           type="range"
+          song={songs[currentSongIndex]} 
           min={0}
           max={duration}
           value={currentTime}

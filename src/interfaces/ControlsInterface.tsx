@@ -1,7 +1,10 @@
+import { ISong } from "@/services/ControlsService";
+
 interface IControls {
     type: string;
     min: number;
     max: number;
+    song?: ISong;
     value: number;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     skipBegin: () => void;
