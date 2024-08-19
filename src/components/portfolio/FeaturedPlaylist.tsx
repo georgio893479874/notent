@@ -1,28 +1,32 @@
 import { Link } from "react-router-dom";
+import ChillVibesIcon from "@assets/chill-vibes-icon.jpg";
+import TopHitsIcon from "@assets/top-hits-icon.jpg";
+import PartyAnthemsIcon from "@assets/party-anthems-icon.jpg";
+import WorkoutBoostIcon from "@assets/workout-boost-icon.jpg";
 
 const playlists = [
     {
         title: "Chill Vibes",
         description: "Relax and unwind with this smooth collection of beats.",
-        imageUrl: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4",
+        imageUrl: ChillVibesIcon,
         link: "/register"
     },
     {
         title: "Top Hits",
         description: "The biggest songs of the moment, all in one place.",
-        imageUrl: "https://images.unsplash.com/photo-1507874457470-272b3c8d8ee2",
+        imageUrl: TopHitsIcon,
         link: "/register"
     },
     {
         title: "Party Anthems",
         description: "Get the party started with these high-energy tracks.",
-        imageUrl: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30",
+        imageUrl: PartyAnthemsIcon,
         link: "/register"
     },
     {
         title: "Workout Boost",
         description: "Pump up your workout with these motivating tracks.",
-        imageUrl: "https://images.unsplash.com/photo-1508830524289-0adcbe822b40",
+        imageUrl: WorkoutBoostIcon,
         link: "/register"
     },
 ];

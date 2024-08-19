@@ -38,7 +38,7 @@ const Song: React.FC<ISong> = ({
 
       {!loading && (
         <div
-          className="song flex items-center gap-8 p-2 cursor-pointer rounded-lg"
+          className="song flex items-center gap-8 p-2 cursor-pointer rounded-lg bg-[#2b2b2b] border-"
           onClick={onSongClick}
         >
           <img src={image_link} className="w-16 h-16 object-cover rounded-lg"/>
