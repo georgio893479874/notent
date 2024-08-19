@@ -11,6 +11,8 @@ import Settings from '@pages/Settings';
 import Search from "@pages/Search";
 import EditProfile from '@pages/EditProfile';
 import Portfolio from './pages/Portfolio';
+import Radio from './pages/Radio';
+import Albums from './pages/Albums';
 
 function App() {
   useEffect(() => {
@@ -39,6 +41,8 @@ function App() {
             <Route path="/search" element={<Search/>}/>
             <Route path="/settings" element={<Settings/>}/>
             <Route path="/editprofile" element={<EditProfile/>}/>
+            <Route path="/radio" element={<Radio/>}/>
+            <Route path="/albums" element={<Albums/>}/>
           </Routes>
         </AuthWrapper>
       </div>
