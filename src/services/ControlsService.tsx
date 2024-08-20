@@ -14,7 +14,7 @@ export interface ISong {
     author: string;
     article: string;
     image_link: string;
-    album_article?: string;
+    album_article: string;
 }
 
 const useControlsService = ({ songs, currentSongIndex, setCurrentSongIndex }: IControlsService) => {

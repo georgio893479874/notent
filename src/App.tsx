@@ -13,6 +13,7 @@ import EditProfile from '@pages/EditProfile';
 import Portfolio from './pages/Portfolio';
 import Radio from './pages/Radio';
 import Albums from './pages/Albums';
+import ArtistPage from './components/artist/Artist';
 
 function App() {
   useEffect(() => {
@@ -40,6 +41,7 @@ function App() {
             <Route path="/profile" element={<Profile/>}/>
             <Route path="/search" element={<Search/>}/>
             <Route path="/settings" element={<Settings/>}/>
+            <Route path="/artist/:id" element={<ArtistPage/>}/>
             <Route path="/editprofile" element={<EditProfile/>}/>
             <Route path="/radio" element={<Radio/>}/>
             <Route path="/albums" element={<Albums/>}/>
