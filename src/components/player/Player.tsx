@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import useControlsService, { ISong } from "@/services/ControlsService";
 import { supabase } from "@/services/SupabaseClientService";
 import Controls from "./Controls";
-// import Song from "../song/Song";
-// import { CircularProgress } from "@mui/material";
+import Song from "../song/Song";
+import { CircularProgress } from "@mui/material";
 import SongInfoModal from "../song/SongInfoModal";
 
 const Player = () => {
   const [songs, setSongs] = useState<ISong[]>([]);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
-  // const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
@@ -20,24 +20,25 @@ const Player = () => {
     const user = await supabase.auth.getUser();
     const id = user.data.user?.id;
 
-    // setLoading(true);
+    setLoading(true);
+    
     const { data, error } = await supabase.from("Songs").select("*").eq("user_id", id);
 
     if (error) {
       throw error;
-      // setLoading(false);
+      setLoading(false);
       return;
     }
 
     setSongs(data || []);
-    // setLoading(false);
+    setLoading(false);
   };
 
-  // const handleSongClick = (index: number) => {
-  //   setCurrentSongIndex(index);
-  //   setIsModalOpen(true);
-  //   togglePlayPause();
-  // };
+  const handleSongClick = (index: number) => {
+    setCurrentSongIndex(index);
+    setIsModalOpen(true);
+    togglePlayPause();
+  };
   
   const {
     isPlaying,
@@ -55,7 +56,7 @@ const Player = () => {
 
   return (
       <div className="flex flex-col items-center justify-center p-4">
-        {/* {loading ? (
+        {loading ? (
           <CircularProgress />
         ) : songs.length > 0 ? (
           <div className="flex flex-col gap-4 mb-4 w-full max-w-lg">
@@ -71,7 +72,7 @@ const Player = () => {
           </div>
         ) : (
           <p>There Are No Songs Here Yet</p>
-        )} */}
+        )}
         <Controls
           type="range"
           song={songs[currentSongIndex]} 
