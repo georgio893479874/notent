@@ -21,10 +21,7 @@ const Player = () => {
     const id = user.data.user?.id;
 
     setLoading(true);
-<<<<<<< HEAD
-=======
     
->>>>>>> bf703b1bb1dd6a99d8c5bab093203fbf1cfd8ac8
     const { data, error } = await supabase.from("Songs").select("*").eq("user_id", id);
 
     if (error) {
