@@ -1,5 +1,5 @@
-import AuthForm from "@components/register/AuthForm.tsx";
-import { handleSignIn } from "@/services/AuthService.tsx";
+import { handleSignIn } from "@/services/RegisterService";
+import AuthForm from "@components/register/AuthForm";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 

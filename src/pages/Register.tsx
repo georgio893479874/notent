@@ -1,7 +1,7 @@
 import { useState } from "react";
-import AuthForm from "@components/register/AuthForm.tsx";
-import { handleSignIn, handleSignUp } from "@/services/AuthService.tsx";
+import AuthForm from "@components/register/AuthForm";
 import { useNavigate } from 'react-router-dom';
+import { handleSignIn, handleSignUp } from "@/services/RegisterService";
 
 const Register = () => {
   const [name, setName] = useState<string>("");
