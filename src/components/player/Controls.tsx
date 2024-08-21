@@ -1,4 +1,3 @@
-import { IControls } from "@/interfaces/ControlsInterface";
 import React, { useEffect, useState } from "react";
 import {
   BsFillPauseCircleFill,
@@ -13,6 +12,7 @@ import { PiDotsThreeOutlineFill } from "react-icons/pi";
 import { IoVolumeHighOutline, IoLaptopOutline } from "react-icons/io5";
 import { IoArrowUpOutline } from "react-icons/io5";
 import { supabase } from "@/services/SupabaseClientService";
+import { IControls } from "@/interfaces/ControlsInterface";
 
 const Controls: React.FC<IControls> = ({
   type,
@@ -32,6 +32,8 @@ const Controls: React.FC<IControls> = ({
 }) => {
   const [albumName, setAlbumName] = useState("");
   const [isFavorite, setIsFavorite] = useState(false);
+  const [showVolumeSlider, setShowVolumeSlider] = useState(false);
+  const [volume, setVolume] = useState(1);
 
   useEffect(() => {
     const fetchAlbumName = async () => {
@@ -82,14 +84,14 @@ const Controls: React.FC<IControls> = ({
       }
 
       setIsFavorite(false);
-    } 
+    }
     
     else {
       const { error } = await supabase.from("FavoriteSongs").insert(
         {
           user_id: userId,
           song_id: song.id,
-        }
+        },
       );
 
       if (error) {
@@ -101,19 +103,43 @@ const Controls: React.FC<IControls> = ({
     }
   };
 
+  const toggleVolumeSlider = () => {
+    setShowVolumeSlider((prev) => !prev);
+  };
+
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const volumeValue = Number(e.target.value);
+    setVolume(volumeValue);
+    if (audioPlayer.current) {
+      audioPlayer.current.volume = volumeValue;
+    }
+  };
+
   return (
     <div className="controls lg:h-24 h-20 flex flex-col items-center justify-between p-4 bg-[#212121] text-white fixed md:bottom-0 bottom-14 left-0 right-0 shadow-lg z-10">
       <div className="flex items-center gap-4 fixed right-8 bottom-20 sm:relative sm:right-auto sm:bottom-auto">
         <p className="md:flex hidden">{current}</p>
-        <BsShuffle className="text-xl cursor-pointer text-gray-400 md:flex hidden"/>
-        <BsFillSkipStartCircleFill onClick={skipBegin} className="text-2xl cursor-pointer text-gray-200"/>
+        <BsShuffle className="text-xl cursor-pointer text-gray-400 md:flex hidden" />
+        <BsFillSkipStartCircleFill
+          onClick={skipBegin}
+          className="text-2xl cursor-pointer text-gray-200"
+        />
         {isPlaying ? (
-          <BsFillPauseCircleFill onClick={togglePlayPause} className="text-3xl cursor-pointer text-gray-200"/>
+          <BsFillPauseCircleFill
+            onClick={togglePlayPause}
+            className="text-3xl cursor-pointer text-gray-200"
+          />
         ) : (
-          <BsFillPlayCircleFill onClick={togglePlayPause} className="text-3xl cursor-pointer text-gray-200"/>
+          <BsFillPlayCircleFill
+            onClick={togglePlayPause}
+            className="text-3xl cursor-pointer text-gray-200"
+          />
         )}
-        <BsSkipEndCircleFill onClick={skipEnd} className="text-2xl cursor-pointer text-gray-200"/>
-        <BsRepeat className="text-xl cursor-pointer text-gray-400 md:flex hidden"/>
+        <BsSkipEndCircleFill
+          onClick={skipEnd}
+          className="text-2xl cursor-pointer text-gray-200"
+        />
+        <BsRepeat className="text-xl cursor-pointer text-gray-400 md:flex hidden" />
         <p className="md:flex hidden">{duration}</p>
       </div>
       <div className="flex-col items-center lg:mb-4 w-1/2 sm:flex hidden">
@@ -131,7 +157,7 @@ const Controls: React.FC<IControls> = ({
           }}
         />
       </div>
-      { song && 
+      {song && (
         <div className="fixed left-4 gap-4 flex">
           <img
             src={song.image_link}
@@ -140,23 +166,52 @@ const Controls: React.FC<IControls> = ({
           <div className="flex flex-col text-start">
             <span className="text-sm font-bold">{song.article}</span>
             <span className="text-xs text-gray-400">{song.author}</span>
-            <span className="text-xs text-gray-500 lg:flex hidden">PLAYING FROM: {albumName}</span>
+            <span className="text-xs text-gray-500 lg:flex hidden">
+              PLAYING FROM: {albumName}
+            </span>
           </div>
-          <div className="flex gap-2 fixed lg:left-36 left-32">  
+          <div className="flex gap-2 fixed lg:left-48 left-44">
             {isFavorite ? (
-              <FaHeart className="text-white cursor-pointer" onClick={toggleFavorite}/>
+              <FaHeart
+                className="text-white cursor-pointer"
+                onClick={toggleFavorite}
+              />
             ) : (
-              <FaRegHeart className="text-white cursor-pointer" onClick={toggleFavorite}/>
+              <FaRegHeart
+                className="text-white cursor-pointer"
+                onClick={toggleFavorite}
+              />
             )}
-            <PiDotsThreeOutlineFill className="text-white cursor-pointer hidden sm:flex"/>
+            <PiDotsThreeOutlineFill className="text-white cursor-pointer hidden sm:flex" />
           </div>
         </div>
-      }
+      )}
       <div className="fixed right-4 gap-4 lg:mt-5 lg:flex hidden">
-        <div className="flex gap-4">
-          <IoVolumeHighOutline className="text-xl cursor-pointer text-gray-200" size={24}/>
-          <IoLaptopOutline className="text-xl cursor-pointer text-gray-200" size={24}/>
-          <IoArrowUpOutline className="text-xl cursor-pointer text-gray-200" size={24}/>
+        <div className="flex gap-4 items-center">
+          <IoVolumeHighOutline
+            className="text-xl cursor-pointer text-gray-200"
+            size={24}
+            onClick={toggleVolumeSlider}
+          />
+          {showVolumeSlider && (
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              value={volume}
+              onChange={handleVolumeChange}
+              className="w-24 h-1 bg-gray-500 rounded-full appearance-none cursor-pointer"
+            />
+          )}
+          <IoLaptopOutline
+            className="text-xl cursor-pointer text-gray-200"
+            size={24}
+          />
+          <IoArrowUpOutline
+            className="text-xl cursor-pointer text-gray-200"
+            size={24}
+          />
         </div>
       </div>
       <audio ref={audioPlayer}></audio>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import AuthForm from "@components/register/AuthForm";
-import { handleSignIn, handleSignUp } from "@services/authService";
+import { handleSignIn, handleSignUp } from "@/services/AuthService";
 import { useNavigate } from 'react-router-dom';
 
 const Register = () => {

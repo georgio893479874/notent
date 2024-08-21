@@ -3,7 +3,6 @@ import useControlsService, { ISong } from "@/services/ControlsService";
 import { supabase } from "@/services/SupabaseClientService";
 import Controls from "./Controls";
 import Song from "../song/Song";
-import { CircularProgress } from "@mui/material";
 import SongInfoModal from "../song/SongInfoModal";
 
 const Player = () => {
@@ -54,7 +53,7 @@ const Player = () => {
   return (
       <div className="flex flex-col items-center justify-center p-4">
         {loading ? (
-          <CircularProgress />
+          null
         ) : songs.length > 0 ? (
           <div className="flex flex-col gap-4 mb-4 w-full max-w-lg">
             {songs.map((song, index) => (

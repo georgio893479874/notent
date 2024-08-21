@@ -1,5 +1,5 @@
 import AuthForm from "@components/register/AuthForm";
-import { handleSignIn } from "@services/authService";
+import { handleSignIn } from "@/services/AuthService";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 

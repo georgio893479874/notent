@@ -14,6 +14,7 @@ import Portfolio from './pages/Portfolio';
 import Radio from './pages/Radio';
 import Albums from './pages/Albums';
 import ArtistPage from './pages/Artist';
+import LoadingScreen from './components/loader/LoadingScreen';
 
 function App() {
   useEffect(() => {
@@ -45,7 +46,8 @@ function App() {
             <Route path="/editprofile" element={<EditProfile/>}/>
             <Route path="/radio" element={<Radio/>}/>
             <Route path="/albums" element={<Albums/>}/>
-          </Routes>
+            <Route path="/e" element={<LoadingScreen/>}/>
+          </Routes> 
         </AuthWrapper>
       </div>
     </BrowserRouter>
