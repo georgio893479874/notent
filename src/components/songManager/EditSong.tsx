@@ -17,10 +17,7 @@ const EditSong = ({
 
   useEffect(() => {
     const fetchSongId = async () => {
-      const user = supabase.auth.getUser();
-      const userId = (await user).data.user?.id;
-
-      const { data, error } = await supabase.from("Songs").select("id").eq("article", currentArticle).eq('user_id', userId).single();
+      const { data, error } = await supabase.from("Songs").select("id").eq("article", currentArticle).single();
 
       if (error) {
         throw error;

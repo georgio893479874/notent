@@ -1,62 +1,90 @@
-//it`s needing to develop
-
 import { ISong } from "@/services/ControlsService";
 import { supabase } from "@/services/SupabaseClientService";
 import Sidebar from "@/components/sidebar/Sidebar";
 import { useEffect, useState } from "react";
 
+interface IArtist {
+  artist_id: string;
+  artist_name: string;
+  artist_avatar: string;
+}
+
 const Search = () => {
   const [songs, setSongs] = useState<ISong[]>([]);
+  const [artists, setArtists] = useState<IArtist[]>([]);
   const [query, setQuery] = useState("");
 
   useEffect(() => {
-    fetchSongs();
+    fetchSongsAndArtists();
   }, []);
 
-  const fetchSongs = async () => {
-    const user = await supabase.auth.getUser();
-    const userId = user.data.user?.id || "";
+  const fetchSongsAndArtists = async () => {
+    const { data: songData, error: songError } = await supabase.from("Songs").select("*");
 
-    const { data, error } = await supabase.from("Songs").select("*").eq("user_id", userId);
-
-    if (error) {
-      throw error;
+    if (songError) {
+      throw songError;
+      return;
     }
 
-    setSongs(data || []);
+    const { data: artistData, error: artistError } = await supabase.from("Artists").select("*");
+
+    if (artistError) {
+      throw artistError;
+      return;
+    }
+
+    setSongs(songData || []);
+    setArtists(artistData || []);
   };
 
-  const filteredSongs = songs.filter((song) => {
-    song.article.toLowerCase().includes(query.toLowerCase()) || 
-    song.author.toLowerCase().includes(query.toLowerCase())
-  });
+  const filteredSongs = songs.filter((song) =>
+    song.article.toLowerCase().includes(query.toLowerCase())
+  );
+
+  const filteredArtists = artists.filter((artist) =>
+    artist.artist_name.toLowerCase().includes(query.toLowerCase())
+  );
 
   return (
-    <div className="flex">
+    <div className="flex h-screen">
       <Sidebar />
-      <div className="flex flex-col flex-grow p-6 min-h-screen items-center justify-start">
+      <div className="flex flex-col flex-grow p-6 items-center justify-center bg-cover bg-center" style={{ backgroundImage: "url('/path-to-background-image.jpg')" }}>
         <div className="w-full max-w-md">
-          <h1 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white text-center">Search Songs</h1>
           <input 
             type="text" 
-            className="p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 w-full" 
-            placeholder="Search by title or author..." 
+            className="p-4 pl-10 bg-black bg-opacity-40 text-white placeholder-gray-500 rounded-full shadow-inner focus:outline-none focus:ring-2 focus:ring-white w-full backdrop-blur-lg"
+            placeholder="Search songs, albums or artist..."
             onChange={(e) => setQuery(e.target.value)}
+            style={{
+              backgroundImage: `url('data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M8 16a8 8 0 110-16 8 8 0 010 16zM21 21l-4.35-4.35' /%3E%3C/svg%3E')`,
+              backgroundPosition: '10px center',
+              backgroundRepeat: 'no-repeat',
+            }}
           />
-          <ul className="list-none">
-            {query && filteredSongs.length > 0 ? (
-              filteredSongs.map((song) => (
-                <li key={song.id} className="flex items-center gap-4 p-4 bg-white dark:bg-gray-800 shadow rounded-lg mb-2 hover:shadow-lg transition-shadow duration-200">
-                  <img src={song.image_link} className="w-16 h-16 object-cover rounded-lg" alt={song.article} />
-                  <div className="flex flex-col flex-grow">
-                    <h3 className="text-lg font-semibold text-gray-800 dark:text-white">{song.article}</h3>
-                    <p className="text-gray-600 dark:text-gray-400">{song.author}</p>
-                  </div>
-                </li>
-              ))
+          <ul className="list-none mt-4 space-y-2">
+            {query && (filteredSongs.length > 0 || filteredArtists.length > 0) ? (
+              <>
+                {filteredSongs.map((song) => (
+                  <li key={song.id} className="flex items-center gap-4 p-4 bg-white bg-opacity-30 backdrop-blur-lg text-white rounded-lg shadow-lg hover:bg-opacity-50 transition duration-200">
+                    <img src={song.image_link} className="w-10 h-10 object-cover rounded-lg" alt={song.article} />
+                    <div className="flex flex-col flex-grow">
+                      <h3 className="text-lg font-semibold">{song.article}</h3>
+                      <p className="text-sm">{song.author}</p>
+                    </div>
+                  </li>
+                ))}
+                {filteredArtists.map((artist) => (
+                  <li key={artist.artist_id} className="flex items-center gap-4 p-4 bg-white bg-opacity-30 backdrop-blur-lg text-white rounded-lg shadow-lg hover:bg-opacity-50 transition duration-200">
+                    <img src={artist.artist_avatar} className="w-10 h-10 object-cover rounded-lg" alt={artist.artist_name} />
+                    <div className="flex flex-col flex-grow">
+                      <h3 className="text-lg font-semibold">{artist.artist_name}</h3>
+                    </div>
+                  </li>
+                ))}
+              </>
             ) : (
               query ? (
-                <li className="text-gray-500 text-center dark:text-gray-300">No songs found.</li>
+                <li className="text-white text-center">No results found.</li>
               ) : null
             )}
           </ul>
@@ -67,6 +95,7 @@ const Search = () => {
 };
 
 export default Search;
+
 
 
 

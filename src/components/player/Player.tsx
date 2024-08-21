@@ -17,12 +17,9 @@ const Player = () => {
   }, []);
 
   const fetchSongs = async () => {
-    const user = await supabase.auth.getUser();
-    const id = user.data.user?.id;
-
     setLoading(true);
     
-    const { data, error } = await supabase.from("Songs").select("*").eq("user_id", id);
+    const { data, error } = await supabase.from("Songs").select("*");
 
     if (error) {
       throw error;

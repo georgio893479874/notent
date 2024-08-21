@@ -1,5 +1,3 @@
-//it`s needing to develop
-
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { supabase } from "@/services/SupabaseClientService";
@@ -16,13 +14,26 @@ interface IAlbum {
   album_photo: string;
 }
 
-const ArtistPage = () => {
+const Artist = () => {
   const { id } = useParams<{ id: string }>();
   const [artist, setArtist] = useState<IArtist | null>(null);
   const [albums, setAlbums] = useState<IAlbum[]>([]);
+  const [isFollowing, setIsFollowing] = useState<boolean>(false);
+  const [userId, setUserId] = useState<string>("");
 
   useEffect(() => {
     const fetchArtistData = async () => {
+      const { data, error } = await supabase.auth.getUser();
+
+      if (error) {
+        throw error;
+        return;
+      }
+
+      if (data.user) {
+        setUserId(data.user.id);
+      }
+
       const { data: artistData, error: artistError } = await supabase.from('Artists').select('*').eq('artist_id', id).single();
 
       if (artistError) {
@@ -42,20 +53,59 @@ const ArtistPage = () => {
       else {
         setAlbums(albumData);
       }
+
+      const { data: followingData, error: followingError } = await supabase.from('Followings').select('*').eq('user_id', userId).eq('artist_id', id).single();
+
+      if (followingError) {
+        throw followingError;
+      }
+
+      if (followingData) {
+        setIsFollowing(true);
+      }
     };
 
     fetchArtistData();
   }, [id]);
 
-  if (!artist) return;
+  const handleFollow = async () => {
+    const { error } = await supabase.from('Followings').insert([
+      { 
+        user_id: userId, 
+        artist_id: id,
+      },
+    ]);
+
+    if (error) {
+      throw error;
+    } 
+    
+    else {
+      setIsFollowing(true);
+    }
+  };
+
+  const handleUnfollow = async () => {
+    const { error } = await supabase.from('Followings').delete().eq('user_id', userId).eq('artist_id', id);
+
+    if (error) {
+      throw error;
+    } 
+    
+    else {
+      setIsFollowing(false);
+    }
+  };
+
+  if (!artist) return null;
 
   return (
     <div className="min-h-screen bg-black text-white p-6 flex flex-col">
       <div className="flex items-center mb-8">
         <div className="mr-6">
-          <img 
+          <img
             className="rounded-full w-32 h-32"
-            src={artist.artist_avatar} 
+            src={artist.artist_avatar}
             alt={artist.artist_name}
           />
         </div>
@@ -66,8 +116,15 @@ const ArtistPage = () => {
             <button className="bg-green-500 text-black px-6 py-2 rounded-full font-semibold">
               Play
             </button>
-            <button className="ml-4 border border-gray-600 px-6 py-2 rounded-full">
-              Following
+            <button
+              className={`ml-4 px-6 py-2 rounded-full ${
+                isFollowing
+                  ? 'bg-red-500 text-white'
+                  : 'border border-gray-600'
+              }`}
+              onClick={isFollowing ? handleUnfollow : handleFollow}
+            >
+              {isFollowing ? 'Unfollow' : 'Follow'}
             </button>
           </div>
         </div>
@@ -77,10 +134,10 @@ const ArtistPage = () => {
         <div className="flex space-x-4">
           {albums.map((album, idx) => (
             <div key={idx} className="w-64">
-              <img 
+              <img
                 className="w-64 h-64 rounded-lg"
-                src={album.album_photo} 
-                alt={album.album_article} 
+                src={album.album_photo}
+                alt={album.album_article}
               />
               <p className="text-center mt-2">{album.album_article}</p>
             </div>
@@ -91,6 +148,5 @@ const ArtistPage = () => {
   );
 };
 
-export default ArtistPage;
-
+export default Artist;
 

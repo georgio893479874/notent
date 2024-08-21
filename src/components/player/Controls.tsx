@@ -1,5 +1,5 @@
 import { IControls } from "@/interfaces/ControlsInterface";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   BsFillPauseCircleFill,
   BsFillPlayCircleFill,
@@ -8,10 +8,11 @@ import {
   BsShuffle,
   BsRepeat,
 } from "react-icons/bs";
-import { FaHeart } from "react-icons/fa";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { PiDotsThreeOutlineFill } from "react-icons/pi";
 import { IoVolumeHighOutline, IoLaptopOutline } from "react-icons/io5";
 import { IoArrowUpOutline } from "react-icons/io5";
+import { supabase } from "@/services/SupabaseClientService";
 
 const Controls: React.FC<IControls> = ({
   type,
@@ -29,6 +30,77 @@ const Controls: React.FC<IControls> = ({
   audioPlayer,
   isPlaying,
 }) => {
+  const [albumName, setAlbumName] = useState("");
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  useEffect(() => {
+    const fetchAlbumName = async () => {
+      if (song?.album_id) {
+        const { data, error } = await supabase.from("Albums").select("album_article").eq("album_id", song.album_id).single();
+
+        if (error) {
+          throw error;
+          return;
+        }
+
+        setAlbumName(data?.album_article || "");
+      }
+    };
+
+    const checkIfFavorite = async () => {
+      const user = await supabase.auth.getUser();
+      const userId = user.data.user?.id;
+
+      if (userId && song?.id) {
+        const { data, error } = await supabase.from("FavoriteSongs").select("*").eq("user_id", userId).eq("song_id", song.id).single();
+
+        if (error) {
+          throw error;
+          return;
+        }
+
+        setIsFavorite(!!data);
+      }
+    };
+
+    fetchAlbumName();
+    checkIfFavorite();
+  }, [song]);
+
+  const toggleFavorite = async () => {
+    const user = await supabase.auth.getUser();
+    const userId = user.data.user?.id;
+
+    if (!userId || !song?.id) return;
+
+    if (isFavorite) {
+      const { error } = await supabase.from("FavoriteSongs").delete().eq("user_id", userId).eq("song_id", song.id);
+
+      if (error) {
+        throw error;
+        return;
+      }
+
+      setIsFavorite(false);
+    } 
+    
+    else {
+      const { error } = await supabase.from("FavoriteSongs").insert(
+        {
+          user_id: userId,
+          song_id: song.id,
+        }
+      );
+
+      if (error) {
+        throw error;
+        return;
+      }
+
+      setIsFavorite(true);
+    }
+  };
+
   return (
     <div className="controls lg:h-24 h-20 flex flex-col items-center justify-between p-4 bg-[#212121] text-white fixed md:bottom-0 bottom-14 left-0 right-0 shadow-lg z-10">
       <div className="flex items-center gap-4 fixed right-8 bottom-20 sm:relative sm:right-auto sm:bottom-auto">
@@ -68,11 +140,15 @@ const Controls: React.FC<IControls> = ({
           <div className="flex flex-col text-start">
             <span className="text-sm font-bold">{song.article}</span>
             <span className="text-xs text-gray-400">{song.author}</span>
-            <span className="text-xs text-gray-500 lg:flex hidden">PLAYING FROM: {song.album_article}</span>
+            <span className="text-xs text-gray-500 lg:flex hidden">PLAYING FROM: {albumName}</span>
           </div>
-          <div className="flex gap-2 fixed lg:left-48 left-44">  
-            <FaHeart className="text-white cursor-pointer"/>
-            <PiDotsThreeOutlineFill className="text-white cursor-pointer"/>
+          <div className="flex gap-2 fixed lg:left-36 left-32">  
+            {isFavorite ? (
+              <FaHeart className="text-white cursor-pointer" onClick={toggleFavorite}/>
+            ) : (
+              <FaRegHeart className="text-white cursor-pointer" onClick={toggleFavorite}/>
+            )}
+            <PiDotsThreeOutlineFill className="text-white cursor-pointer hidden sm:flex"/>
           </div>
         </div>
       }
@@ -89,5 +165,7 @@ const Controls: React.FC<IControls> = ({
 };
 
 export default Controls;
+
+
 
 

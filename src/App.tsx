@@ -13,7 +13,7 @@ import EditProfile from '@pages/EditProfile';
 import Portfolio from './pages/Portfolio';
 import Radio from './pages/Radio';
 import Albums from './pages/Albums';
-import ArtistPage from './components/artist/Artist';
+import ArtistPage from './pages/Artist';
 
 function App() {
   useEffect(() => {

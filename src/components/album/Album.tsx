@@ -1,11 +1,9 @@
-//it`s needing to develop
-
-interface IAlbumCard {
+interface IAlbum {
   article: string;
   album_photo: string;
 }
 
-const AlbumCard = ({ article, album_photo }: IAlbumCard) => {
+const Album = ({ article, album_photo }: IAlbum) => {
   return (
     <div className="bg-black p-4 w-60">
       <img 
@@ -20,6 +18,6 @@ const AlbumCard = ({ article, album_photo }: IAlbumCard) => {
   );
 }
 
-export default AlbumCard;
+export default Album;
 
 
