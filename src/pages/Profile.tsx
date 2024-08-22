@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import UserAvatar from '../components/profile/UserAvatar'; 
+import UserAvatar from '@components/profile/UserAvatar'; 
 import { Typography } from '@mui/material';
-import { supabase } from '@services/SupabaseClientService';
+import { supabase } from '@/services/SupabaseClientService';
 import { Link } from 'react-router-dom';
 import { IoArrowBackOutline } from "react-icons/io5";
 import { BsPenFill } from "react-icons/bs";
@@ -22,6 +22,7 @@ const Profile = () => {
       
       else {
         const user = data?.user;
+        
         setUser(user);
 
         if (user) {

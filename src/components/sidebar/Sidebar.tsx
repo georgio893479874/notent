@@ -5,7 +5,6 @@ import { BsMusicNoteList } from "react-icons/bs";
 import { PiMicrophoneThin, PiMusicNotesPlusThin } from "react-icons/pi";
 import { ImHeart } from "react-icons/im";
 import { Link } from 'react-router-dom';
-import LogoIcon from "../../../public/favicon.ico";
 
 const Sidebar = () => {
   const [activeItem, setActiveItem] = useState('Home');
@@ -29,7 +28,6 @@ const Sidebar = () => {
       <div className="hidden lg:flex flex-col w-64 h-screen bg-[#272727] text-gray-200 fixed top-0 left-0">
         <div className="flex items-center justify-center h-20 bg-[#2b2b2b] gap-3">
           <span className="text-4xl font-bold text-gray-400">Notent</span>
-          <img src={LogoIcon} className='h-10 w-10 mt-2'/>
         </div>
         <nav className="mt-10">
           <ul>

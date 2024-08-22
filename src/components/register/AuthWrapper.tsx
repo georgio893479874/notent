@@ -1,10 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '@/services/SupabaseClientService';
-import LoadingScreen from '../loader/LoadingScreen';
 
 const AuthWrapper = ({ children }: { children: JSX.Element }) => {
-  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -17,14 +15,10 @@ const AuthWrapper = ({ children }: { children: JSX.Element }) => {
           navigate('/');
         }
       }
-
-      setLoading(false);
     };
 
     checkAuth();
   }, [navigate, location.pathname]);
-
-  if (loading) return <LoadingScreen/>;
 
   return children;
 };

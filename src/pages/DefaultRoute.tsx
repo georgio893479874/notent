@@ -4,7 +4,7 @@ import Player from "@components/player/Player";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const DefaultRoutes = () => {
+const DefaultRoute = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,4 +24,4 @@ const DefaultRoutes = () => {
   );
 };
 
-export default DefaultRoutes;
+export default DefaultRoute;

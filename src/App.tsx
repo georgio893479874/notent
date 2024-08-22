@@ -3,18 +3,20 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './styles/App.scss';
 import KeepAliveComponent from '@components/keepAlive/KeepAlive';
 import AuthWrapper from '@components/register/AuthWrapper';
-import Register from '@pages/Register';
-import SignIn from '@pages/SignIn';
-import DefaultRoutes from '@/pages/DefaultRoute';
-import Profile from '@pages/Profile';
-import Settings from '@pages/Settings';
-import Search from "@pages/Search";
-import EditProfile from '@pages/EditProfile';
-import Portfolio from './pages/Portfolio';
-import Radio from './pages/Radio';
-import Albums from './pages/Albums';
-import ArtistPage from './pages/Artist';
-import LoadingScreen from './components/loader/LoadingScreen';
+import { 
+  Register, 
+  SignIn, 
+  DefaultRoute, 
+  Profile,
+  Settings,
+  Search,
+  EditProfile,
+  Portfolio,
+  Radio,
+  Albums,
+  Artist,
+  Album
+} from './pages';
 
 function App() {
   useEffect(() => {
@@ -38,15 +40,15 @@ function App() {
             <Route path="/" element={<Portfolio/>}/>
             <Route path="/register" element={<Register/>}/>
             <Route path="/signin" element={<SignIn/>}/>
-            <Route path="/player" element={<DefaultRoutes/>}/>
+            <Route path="/player" element={<DefaultRoute/>}/>
             <Route path="/profile" element={<Profile/>}/>
             <Route path="/search" element={<Search/>}/>
             <Route path="/settings" element={<Settings/>}/>
-            <Route path="/artist/:id" element={<ArtistPage/>}/>
+            <Route path="/artist/:id" element={<Artist/>}/>
             <Route path="/editprofile" element={<EditProfile/>}/>
             <Route path="/radio" element={<Radio/>}/>
             <Route path="/albums" element={<Albums/>}/>
-            <Route path="/e" element={<LoadingScreen/>}/>
+            <Route path="/album/:albumId" element={<Album/>}/>
           </Routes> 
         </AuthWrapper>
       </div>

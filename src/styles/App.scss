@@ -121,7 +121,28 @@ body, html {
   }
 }
 
+.album-page {
+  min-height: 100vh; /* Задає мінімальну висоту, щоб компонент займав весь екран */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
+.album-header {
+  width: 100%;
+  max-width: 1024px; /* Задає максимальну ширину для більш красивого відображення */
+  margin-bottom: 2rem;
+}
+
+.song-list {
+  width: 100%;
+  max-width: 1024px;
+}
+
+.song-item {
+  padding: 1rem;
+  border-bottom: 1px solid #444; /* Легкий поділ між піснями */
+}
 
 
 

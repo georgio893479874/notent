@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { supabase } from "@services/SupabaseClientService";
+import { supabase } from "@/services/SupabaseClientService";
 import EditProfileForm from '@/components/profile/EditProfileForm';
 
 const EditProfile = () => {

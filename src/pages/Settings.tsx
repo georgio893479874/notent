@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { supabase } from "@services/SupabaseClientService";
+import { supabase } from "@/services/SupabaseClientService";
 import Sidebar from "@/components/sidebar/Sidebar";
 
 const Settings = () => {
