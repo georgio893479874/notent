@@ -3,6 +3,7 @@ import Sidebar from "@/components/sidebar/Sidebar";
 import Player from "@components/player/Player";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import FavoriteAlbums from "@/components/favoriteAlbums/FavoriteAlbums";
 
 const DefaultRoute = () => {
   const navigate = useNavigate();
@@ -17,7 +18,10 @@ const DefaultRoute = () => {
 
   return (
     <>
-      <Player/>
+      <div className="flex flex-col items-center justify-center p-4">
+        <Player/>
+        <FavoriteAlbums/>
+      </div>
       <Sidebar/>
       <AvatarMenu/>
     </>

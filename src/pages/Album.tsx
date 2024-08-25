@@ -1,7 +1,8 @@
+import Player from '@/components/player/Player';
 import Sidebar from '@/components/sidebar/Sidebar';
 import { supabase } from '@/services/SupabaseClientService';
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
 
 interface Album {
     album_id: string;
@@ -16,6 +17,7 @@ interface Song {
     article: string;
     artist: string;
     album_id: string;
+    duration: number;
 }
 
 interface Author {
@@ -29,13 +31,15 @@ const Album: React.FC = () => {
   const [album, setAlbum] = useState<Album | null>(null);
   const [songs, setSongs] = useState<Song[]>([]);
   const [author, setAuthor] = useState<Author | null>(null);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [userId, setUserId] = useState<string>("");
 
   useEffect(() => {
     const fetchAlbum = async () => {
       const { data: albumData, error: albumError } = await supabase.from('Albums').select('*').eq('album_id', albumId).single();
 
       if (albumError) {
-        console.error(albumError);
+        throw albumError;
       } 
       
       else {
@@ -56,23 +60,96 @@ const Album: React.FC = () => {
     };
 
     const fetchAuthor = async () => {
-        if (album?.album_author_id) {
-            const { data: authorData, error: authorError } = await supabase.from('Artists').select('*').eq('artist_id', album.album_author_id);
+      if (album?.album_author_id) {
+        const { data: authorData, error: authorError } = await supabase.from('Artists').select('*').eq('artist_id', album.album_author_id);
 
-            if (authorError) {
-                throw authorError;
-            } 
-
-            else {
-                setAuthor(authorData?.[0] || null);
-            }
+        if (authorError) {
+          throw authorError;
+        } 
+        
+        else {
+          setAuthor(authorData?.[0] || null);
         }
+      }
+    };
+
+    const checkFavorite = async () => {
+      const { data: userData, error: userError } = await supabase.auth.getUser();
+
+      if (userError) {
+          throw userError;
+      } 
+      
+      else {
+          const id = userData?.user?.id;
+          
+          setUserId(id);
+      }
+
+      const { data, error } = await supabase.from('FavoriteAlbums').select('*').eq('album_id', albumId).eq('user_id', userId);
+
+      if (data && data.length > 0) {
+        setIsFavorite(true);
+      }
+
+      if (error) {
+        throw error;
+      }
     };
 
     fetchAlbum();
     fetchSongs();
     fetchAuthor();
-  }, [albumId, album?.album_author_id]);
+    checkFavorite();
+  }, [albumId, album?.album_author_id, userId]);
+
+  const addToFavorites = async () => {
+    const { data, error } = await supabase.from('FavoriteAlbums').insert([
+      { 
+        album_id: albumId, 
+        user_id: userId,
+      }
+    ]);
+
+    if (error) {
+      throw error;
+    } 
+    
+    else if (data) {
+      setIsFavorite(true);
+    }
+  }
+
+  const removeFromFavorites = async () => {
+    const { data, error } = await supabase.from('FavoriteAlbums').delete().eq('album_id', albumId).eq('user_id', userId);
+
+    if (error) {
+      throw error;
+    } 
+    
+    else if (data) {
+      setIsFavorite(false);
+    }
+  }
+
+  const toggleFavorite = async () => {
+    if (isFavorite) {
+      await removeFromFavorites();
+    } 
+    
+    else {
+      await addToFavorites();
+    }
+  }
+
+  const totalSongs = songs.length;
+  const totalDurationInSeconds = songs.reduce((total, song) => total + (song.duration || 0), 0);
+  
+  const formatDuration = (totalSeconds: number) => {
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes} min ${seconds} s`;
+  };
 
   if (!album) return null;
 
@@ -87,8 +164,15 @@ const Album: React.FC = () => {
           />
           <h1 className="text-4xl font-bold">{album.album_article}</h1>
           <h2 className="text-lg text-gray-400">
-            {author?.artist_name} · {(album.public_date).split('-')[0]} · 13 songs, 49 min 57 s
+            <Link to={`/artist/${album.album_author_id}`}>{author?.artist_name}</Link> · {(album.public_date).split('-')[0]} · {totalSongs} songs, {formatDuration(totalDurationInSeconds)}
           </h2>
+          <button 
+            onClick={toggleFavorite} 
+            disabled={!userId} 
+            className={`mt-4 p-2 rounded ${isFavorite ? 'bg-gray-600' : 'bg-blue-500 hover:bg-blue-700'}`}
+          >
+            {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
+          </button>
         </div>
         <div className="w-full max-w-3xl">
           <ul className="space-y-2">
@@ -107,6 +191,7 @@ const Album: React.FC = () => {
           </ul>
         </div>
       </div>
+      <Player/>
     </>
   );
 };

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { supabase } from "@/services/SupabaseClientService";
 import Sidebar from "@/components/sidebar/Sidebar";
 
@@ -103,7 +103,7 @@ const Artist = () => {
   return (
     <>
       <Sidebar/>
-      <div className="min-h-screen bg-black text-white p-6 flex flex-col">
+      <div className="min-h-screen text-white p-6 flex flex-col items-start lg:ml-64">
         <div className="flex items-center mb-8">
           <div className="mr-6">
             <img
@@ -136,14 +136,16 @@ const Artist = () => {
           <h2 className="text-2xl font-bold mb-4">Popular Releases</h2>
           <div className="flex space-x-4">
             {albums.map((album, idx) => (
-              <div key={idx} className="w-64">
-                <img
-                  className="w-64 h-64 rounded-lg"
-                  src={album.album_photo}
-                  alt={album.album_article}
-                />
-                <p className="text-center mt-2">{album.album_article}</p>
-              </div>
+              <Link to={`/album/`}>
+                <div key={idx} className="w-64">
+                  <img
+                    className="w-64 h-64 rounded-lg"
+                    src={album.album_photo}
+                    alt={album.album_article}
+                  />
+                  <p className="text-center mt-2">{album.album_article}</p>
+                </div>
+              </Link>
             ))}
           </div>
         </div>
