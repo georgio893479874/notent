@@ -1,29 +1,29 @@
+import React, { useEffect, useState } from "react";
 import Player from '@/components/player/Player';
 import Sidebar from '@/components/sidebar/Sidebar';
 import { supabase } from '@/services/SupabaseClientService';
-import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-
+import { ISong } from "@/services/ControlsService";
 interface Album {
-    album_id: string;
-    album_article: string;
-    album_author_id: string;
-    album_photo: string;
-    public_date: string;
+  album_id: string;
+  album_article: string;
+  album_author_id: string;
+  album_photo: string;
+  public_date: string;
 }
 
 interface Song {
-    id: string;
-    article: string;
-    artist: string;
-    album_id: string;
-    duration: number;
+  id: string;
+  article: string;
+  artist: string;
+  album_id: string;
+  duration: number;
 }
 
 interface Author {
-    artist_name: string;
-    artist_id: string;
-    artist_avatar: string;
+  artist_name: string;
+  artist_id: string;
+  artist_avatar: string;
 }
 
 const Album: React.FC = () => {
@@ -33,6 +33,7 @@ const Album: React.FC = () => {
   const [author, setAuthor] = useState<Author | null>(null);
   const [isFavorite, setIsFavorite] = useState(false);
   const [userId, setUserId] = useState<string>("");
+  const [selectedSong, setSelectedSong] = useState<ISong | undefined>(undefined);
 
   useEffect(() => {
     const fetchAlbum = async () => {
@@ -41,10 +42,8 @@ const Album: React.FC = () => {
       if (albumError) {
         throw albumError;
       } 
-      
-      else {
-        setAlbum(albumData);
-      }
+
+      setAlbum(albumData);
     };
 
     const fetchSongs = async () => {
@@ -53,10 +52,8 @@ const Album: React.FC = () => {
       if (songsError) {
         throw songsError;
       } 
-      
-      else {
-        setSongs(songsData || []);
-      }
+
+      setSongs(songsData || []);
     };
 
     const fetchAuthor = async () => {
@@ -66,10 +63,8 @@ const Album: React.FC = () => {
         if (authorError) {
           throw authorError;
         } 
-        
-        else {
-          setAuthor(authorData?.[0] || null);
-        }
+
+        setAuthor(authorData?.[0] || null);
       }
     };
 
@@ -80,11 +75,9 @@ const Album: React.FC = () => {
           throw userError;
       } 
       
-      else {
-          const id = userData?.user?.id;
-          
-          setUserId(id);
-      }
+      const id = userData?.user?.id;
+
+      setUserId(id);
 
       const { data, error } = await supabase.from('FavoriteAlbums').select('*').eq('album_id', albumId).eq('user_id', userId);
 
@@ -114,9 +107,9 @@ const Album: React.FC = () => {
     if (error) {
       throw error;
     } 
-    
+
     else if (data) {
-      setIsFavorite(true);
+      setIsFavorite(false);
     }
   }
 
@@ -126,7 +119,7 @@ const Album: React.FC = () => {
     if (error) {
       throw error;
     } 
-    
+
     else if (data) {
       setIsFavorite(false);
     }
@@ -148,6 +141,7 @@ const Album: React.FC = () => {
   const formatDuration = (totalSeconds: number) => {
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
+
     return `${minutes} min ${seconds} s`;
   };
 
@@ -156,44 +150,47 @@ const Album: React.FC = () => {
   return (
     <>
       <Sidebar />
-      <div className="bg-[#323131] text-white flex flex-col items-center p-8 h-screen">
-        <div className="text-center mb-8">
+      <div className="bg-[#323131] text-white flex flex-col items-center py-32 h-screen overflow-y-auto px-4">
+        <div className="text-center mb-6 sm:mb-8">
           <img
             src={album.album_photo}
-            className="w-48 h-48 object-cover mx-auto mb-4"
+            className="w-56 h-56 sm:w-52 sm:h-52 object-cover mx-auto mb-4"
           />
-          <h1 className="text-4xl font-bold">{album.album_article}</h1>
-          <h2 className="text-lg text-gray-400">
+          <h1 className="text-2xl sm:text-4xl font-bold">{album.album_article}</h1>
+          <h2 className="text-sm sm:text-lg text-gray-400">
             <Link to={`/artist/${album.album_author_id}`}>{author?.artist_name}</Link> · {(album.public_date).split('-')[0]} · {totalSongs} songs, {formatDuration(totalDurationInSeconds)}
           </h2>
           <button 
             onClick={toggleFavorite} 
             disabled={!userId} 
-            className={`mt-4 p-2 rounded ${isFavorite ? 'bg-gray-600' : 'bg-blue-500 hover:bg-blue-700'}`}
+            className={`mt-4 p-2 rounded ${isFavorite ? 'bg-gray-600' : 'bg-blue-500 hover:bg-blue-700'} transition-colors duration-200`}
           >
             {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
           </button>
         </div>
         <div className="w-full max-w-3xl">
           <ul className="space-y-2">
-            {songs.map((song) => (
+            {songs.map((song, key) => (
               <li
                 key={song.id}
-                className="flex justify-between items-center bg-gray-800 p-4 rounded-lg hover:bg-gray-700"
+                className="flex flex-col sm:flex-row justify-between items-center bg-[#2c2b2b] p-3 sm:p-4 rounded-lg cursor-pointer"
+                //@ts-ignore
+                onClick={() => setSelectedSong(song)}
               >
-                <div className="flex items-center space-x-4">
-                  <span className="text-gray-400">{song.id}</span>
-                  <h3 className="text-lg">{song.article}</h3>
+                <div className="flex items-center space-x-2 sm:space-x-4">
+                  <span className="text-gray-400 text-sm sm:text-base">{key + 1}</span>
+                  <h3 className="text-base sm:text-lg">{song.article}</h3>
                 </div>
-                <p className="text-gray-400">{author?.artist_name}</p>
+                <p className="text-gray-400 text-sm sm:text-base">{author?.artist_name}</p>
               </li>
             ))}
           </ul>
         </div>
       </div>
-      <Player/>
+      <Player selectedSong={selectedSong} />
     </>
   );
 };
 
 export default Album;
+

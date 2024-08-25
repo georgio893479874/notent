@@ -220,7 +220,3 @@ const Controls: React.FC<IControls> = ({
 };
 
 export default Controls;
-
-
-
-
