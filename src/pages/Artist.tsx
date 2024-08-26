@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { supabase } from "@/services/SupabaseClientService";
 import Sidebar from "@/components/sidebar/Sidebar";
+import { FaPlay } from "react-icons/fa";
 
 export interface IArtist {
   artist_id: string;
@@ -13,6 +14,8 @@ interface IAlbum {
   album_author_id: string;
   album_article: string;
   album_photo: string;
+  album_id: string;
+  public_date: string;
 }
 
 const Artist = () => {
@@ -21,6 +24,11 @@ const Artist = () => {
   const [albums, setAlbums] = useState<IAlbum[]>([]);
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const [userId, setUserId] = useState<string>("");
+  const showAll = false;
+
+  const sortedAlbums = [...albums].sort((a, b) => new Date(a.public_date).getTime() - new Date(b.public_date).getTime());
+
+  const visibleAlbums = showAll ? sortedAlbums : sortedAlbums.slice(0, 5);
 
   useEffect(() => {
     const fetchArtistData = async () => {
@@ -64,7 +72,7 @@ const Artist = () => {
       if (followingData) {
         setIsFollowing(true);
       }
-    };
+    }
 
     fetchArtistData();
   }, [id]);
@@ -102,28 +110,24 @@ const Artist = () => {
 
   return (
     <>
-      <Sidebar/>
-      <div className="min-h-screen text-white p-6 flex flex-col items-start lg:ml-64">
-        <div className="flex items-center mb-8">
-          <div className="mr-6">
-            <img
-              className="rounded-full w-32 h-32"
-              src={artist.artist_avatar}
-              alt={artist.artist_name}
-            />
-          </div>
-          <div>
-            <h1 className="text-4xl font-bold">{artist.artist_name}</h1>
-            <p className="text-gray-400 mt-2">82,736,050 monthly listeners</p>
-            <div className="flex items-center mt-4">
-              <button className="bg-green-500 text-black px-6 py-2 rounded-full font-semibold">
-                Play
+      <Sidebar />
+      <div className="min-h-screen text-white flex flex-col lg:ml-64">
+        <div className="relative mb-8 w-full h-56 lg:h-80 bg-gray-800 overflow-hidden">
+          <img
+            className="w-full h-full object-cover"
+            src={artist.artist_avatar}
+          />
+          <div className="absolute inset-0 flex flex-col items-start justify-end p-4">
+            <div className="text-white p-4 rounded-lg">
+              <h1 className="text-xl lg:text-7xl font-bold">{artist.artist_name}</h1>
+            </div>
+            <div className="mt-4 flex items-center space-x-4">
+              <button className="bg-green-500 text-black p-4 rounded-full font-semibold">
+                <FaPlay/>
               </button>
               <button
-                className={`ml-4 px-6 py-2 rounded-full ${
-                  isFollowing
-                    ? 'bg-red-500 text-white'
-                    : 'border border-gray-600'
+                className={`px-4 py-2 rounded-full ${
+                  isFollowing ? 'bg-red-500 text-white' : 'border border-gray-600'
                 }`}
                 onClick={isFollowing ? handleUnfollow : handleFollow}
               >
@@ -132,22 +136,46 @@ const Artist = () => {
             </div>
           </div>
         </div>
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-4">Popular Releases</h2>
-          <div className="flex space-x-4">
-            {albums.map((album, idx) => (
-              <Link to={`/album/`}>
-                <div key={idx} className="w-64">
+        <div className="w-full mb-24">
+          <div className="lg:flex justify-end mb-4 mr-12 hidden">
+            {albums.length > 4 && (
+              <Link
+                to={`/all-albums/${artist.artist_id}`}
+                className="px-4 py-2 bg-transparent border border-gray-600 text-white rounded-full hover:bg-gray-700 transition-colors"
+              >
+                Show More
+              </Link>
+            )}
+          </div>
+          <div className="flex flex-col items-center justify-center lg:flex-row lg:items-start lg:justify-start gap-4 px-4">
+            {visibleAlbums.map((album, idx) => (
+              <Link to={`/album/${album.album_id}`} key={idx} className="w-full lg:w-64 mb-4">
+                <div className="flex flex-col items-center justify-center">
                   <img
-                    className="w-64 h-64 rounded-lg"
+                    className="w-auto h-full rounded-lg object-cover max-w-64"
                     src={album.album_photo}
                     alt={album.album_article}
                   />
-                  <p className="text-center mt-2">{album.album_article}</p>
+                  <div className="text-center mt-2 text-sm lg:text-base">
+                    <p>{album.album_article}</p>
+                    <p className="text-gray-400 text-xs lg:text-sm">
+                      {(album.public_date).split('-')[0]}
+                    </p>
+                  </div>
                 </div>
               </Link>
             ))}
           </div>
+          {albums.length > 4 && (
+            <div className="flex justify-center mt-4 lg:hidden">
+              <Link
+                to={`/all-albums/${artist.artist_id}`}
+                className="px-4 py-2 bg-transparent border border-gray-600 text-white rounded-full hover:bg-gray-700 transition-colors"
+              >
+                Show More
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </>
@@ -155,4 +183,3 @@ const Artist = () => {
 };
 
 export default Artist;
-

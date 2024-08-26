@@ -4,7 +4,7 @@ import Sidebar from '@/components/sidebar/Sidebar';
 import { supabase } from '@/services/SupabaseClientService';
 import { Link, useParams } from 'react-router-dom';
 import { ISong } from "@/services/ControlsService";
-interface Album {
+export interface Album {
   album_id: string;
   album_article: string;
   album_author_id: string;
