@@ -111,8 +111,8 @@ const Artist = () => {
   return (
     <>
       <Sidebar />
-      <div className="min-h-screen text-white flex flex-col lg:ml-64">
-        <div className="relative mb-8 w-full h-56 lg:h-80 bg-gray-800 overflow-hidden">
+      <div className="min-h-screen text-white flex flex-col lg:ml-64 p-6">
+        <div className="relative mb-8 w-full h-56 lg:h-80 bg-gray-800 overflow-hidden rounded-lg">
           <img
             className="w-full h-full object-cover"
             src={artist.artist_avatar}
@@ -121,7 +121,7 @@ const Artist = () => {
             <div className="text-white p-4 rounded-lg">
               <h1 className="text-xl lg:text-7xl font-bold">{artist.artist_name}</h1>
             </div>
-            <div className="mt-4 flex items-center space-x-4">
+            <div className="flex items-center space-x-4">
               <button className="bg-green-500 text-black p-4 rounded-full font-semibold">
                 <FaPlay/>
               </button>
@@ -147,7 +147,7 @@ const Artist = () => {
               </Link>
             )}
           </div>
-          <div className="flex flex-col items-center justify-center lg:flex-row lg:items-start lg:justify-start gap-4 px-4">
+          <div className="flex flex-col items-center justify-center lg:flex-row lg:items-start lg:justify-start gap-4">
             {visibleAlbums.map((album, idx) => (
               <Link to={`/album/${album.album_id}`} key={idx} className="w-full lg:w-64 mb-4">
                 <div className="flex flex-col items-center justify-center">

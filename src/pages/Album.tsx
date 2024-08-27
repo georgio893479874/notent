@@ -4,6 +4,7 @@ import Sidebar from '@/components/sidebar/Sidebar';
 import { supabase } from '@/services/SupabaseClientService';
 import { Link, useParams } from 'react-router-dom';
 import { ISong } from "@/services/ControlsService";
+import NavigationButtons from "@/components/NavigationButtons/NavigationButtons";
 export interface Album {
   album_id: string;
   album_article: string;
@@ -12,12 +13,12 @@ export interface Album {
   public_date: string;
 }
 
-interface Song {
-  id: string;
-  article: string;
-  artist: string;
-  album_id: string;
-  duration: number;
+interface Song extends ISong {
+  created_at: string;
+  audio_link: string;
+  author: string;
+  image_link: string;
+  author_id: string;
 }
 
 interface Author {
@@ -136,7 +137,7 @@ const Album: React.FC = () => {
   }
 
   const totalSongs = songs.length;
-  const totalDurationInSeconds = songs.reduce((total, song) => total + (song.duration || 0), 0);
+  const totalDurationInSeconds = songs.reduce((total, song) => total + Number(song.duration || 0), 0);
   
   const formatDuration = (totalSeconds: number) => {
     const minutes = Math.floor(totalSeconds / 60);
@@ -149,6 +150,7 @@ const Album: React.FC = () => {
 
   return (
     <>
+      <NavigationButtons/>
       <Sidebar />
       <div className="bg-[#323131] text-white flex flex-col items-center py-32 h-screen overflow-y-auto px-4">
         <div className="text-center mb-6 sm:mb-8">
@@ -174,20 +176,18 @@ const Album: React.FC = () => {
               <li
                 key={song.id}
                 className="flex flex-col sm:flex-row justify-between items-center bg-[#2c2b2b] p-3 sm:p-4 rounded-lg cursor-pointer"
-                //@ts-ignore
                 onClick={() => setSelectedSong(song)}
               >
                 <div className="flex items-center space-x-2 sm:space-x-4">
                   <span className="text-gray-400 text-sm sm:text-base">{key + 1}</span>
                   <h3 className="text-base sm:text-lg">{song.article}</h3>
                 </div>
-                <p className="text-gray-400 text-sm sm:text-base">{author?.artist_name}</p>
               </li>
             ))}
           </ul>
         </div>
       </div>
-      <Player selectedSong={selectedSong} />
+      <Player selectedSong={selectedSong}/>
     </>
   );
 };
