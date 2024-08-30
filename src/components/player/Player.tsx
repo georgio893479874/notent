@@ -3,15 +3,14 @@ import useControlsService, { ISong } from "@/services/ControlsService";
 import { supabase } from "@/services/SupabaseClientService";
 import Controls from "./Controls";
 import SongInfoModal from "../song/SongInfoModal";
+import { usePlayer } from '@/context/PlayerContext';
 
-interface PlayerProps {
-  selectedSong?: ISong | null;
-}
-
-const Player: React.FC<PlayerProps> = ({ selectedSong }) => {
+const Player: React.FC = () => {
+  const { selectedSong } = usePlayer();
   const [songs, setSongs] = useState<ISong[]>([]);
   const [currentSongIndex, setCurrentSongIndex] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [repeatMode, setRepeatMode] = useState<'off' | 'one' | 'all'>('off');
 
   useEffect(() => {
     fetchSongs();
@@ -32,7 +31,7 @@ const Player: React.FC<PlayerProps> = ({ selectedSong }) => {
 
     if (error) {
       throw error;
-    } 
+    }
 
     setSongs(data || []);
   };
@@ -49,7 +48,8 @@ const Player: React.FC<PlayerProps> = ({ selectedSong }) => {
     skipEnd,
     currentFormatted,
     durationFormatted,
-  } = useControlsService({ songs, currentSongIndex, setCurrentSongIndex });
+    repeatMode: controlsRepeatMode,
+  } = useControlsService({ songs, currentSongIndex, setCurrentSongIndex, repeatMode });
 
   return (
     <div className="flex flex-col items-center justify-center p-4">
@@ -68,6 +68,8 @@ const Player: React.FC<PlayerProps> = ({ selectedSong }) => {
         togglePlayPause={togglePlayPause}
         current={currentFormatted}
         duration={durationFormatted}
+        repeatMode={controlsRepeatMode}
+        setRepeatMode={setRepeatMode}
       />
       {isModalOpen && (
         <SongInfoModal 
@@ -91,3 +93,4 @@ const Player: React.FC<PlayerProps> = ({ selectedSong }) => {
 };
 
 export default Player;
+

@@ -5,7 +5,6 @@ import { supabase } from '@/services/SupabaseClientService';
 import { Link } from 'react-router-dom';
 import { IoArrowBackOutline } from "react-icons/io5";
 import { BsPenFill } from "react-icons/bs";
-import Sidebar from '@/components/sidebar/Sidebar';
 
 const Profile = () => {
   const [user, setUser] = useState<any>(null);
@@ -41,7 +40,6 @@ const Profile = () => {
 
   return (
     <>
-      <Sidebar />
       <div className="flex flex-col items-center justify-center flex-1"> 
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 w-full max-w-md">
           <div className="fixed items-start justify-between mb-6">

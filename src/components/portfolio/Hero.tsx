@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
+import HeroIcon from "@/assets/hero-icon.jpg"
 
 const Hero = () => {
     return (
         <section className="relative bg-gray-950 min-h-screen flex items-center justify-center text-white">
             <img 
-                src="https://images.unsplash.com/photo-1504805572947-34fad45aed93" 
-                alt="Music Background" 
-                className="absolute inset-0 w-full h-full object-cover opacity-5" 
+                src={HeroIcon}
+                className="absolute inset-0 w-full h-full object-cover opacity-20" 
             />
             <div className="relative z-10 text-center p-8">
                 <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-6">Music Without Limits</h1>

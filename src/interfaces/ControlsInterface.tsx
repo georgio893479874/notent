@@ -15,6 +15,8 @@ interface IControls {
     isPlaying: boolean;
     duration: string;
     current: string;
+    repeatMode: "one" | "all" | "off";
+    setRepeatMode: React.Dispatch<React.SetStateAction<"one" | "all" | "off">>;
 }
 
 export type { IControls };

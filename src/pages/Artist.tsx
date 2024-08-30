@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { supabase } from "@/services/SupabaseClientService";
-import Sidebar from "@/components/sidebar/Sidebar";
 import { FaPlay } from "react-icons/fa";
 
 export interface IArtist {
@@ -110,7 +109,6 @@ const Artist = () => {
 
   return (
     <>
-      <Sidebar />
       <div className="min-h-screen text-white flex flex-col lg:ml-64 p-6">
         <div className="relative mb-8 w-full h-56 lg:h-80 bg-gray-800 overflow-hidden rounded-lg">
           <img

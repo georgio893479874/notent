@@ -29,6 +29,8 @@ const Controls: React.FC<IControls> = ({
   progressBar,
   audioPlayer,
   isPlaying,
+  repeatMode,
+  setRepeatMode,
 }) => {
   const [albumName, setAlbumName] = useState("");
   const [isFavorite, setIsFavorite] = useState(false);
@@ -84,15 +86,13 @@ const Controls: React.FC<IControls> = ({
       }
 
       setIsFavorite(false);
-    }
+    } 
     
     else {
-      const { error } = await supabase.from("FavoriteSongs").insert(
-        {
-          user_id: userId,
-          song_id: song.id,
-        },
-      );
+      const { error } = await supabase.from("FavoriteSongs").insert({
+        user_id: userId,
+        song_id: song.id,
+      });
 
       if (error) {
         throw error;
@@ -109,17 +109,28 @@ const Controls: React.FC<IControls> = ({
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const volumeValue = Number(e.target.value);
+
     setVolume(volumeValue);
+
     if (audioPlayer.current) {
       audioPlayer.current.volume = volumeValue;
     }
   };
 
+  const toggleRepeatMode = () => {
+    setRepeatMode((prevMode) => {
+      if (prevMode === 'off') return 'one';
+      if (prevMode === 'one') return 'all';
+      
+      return 'off';
+    });
+  };
+
   return (
-    <div className="controls lg:h-24 h-20 flex flex-col items-center justify-between p-4 bg-[#212121] text-white fixed md:bottom-0 bottom-14 left-0 right-0 shadow-lg z-10">
+    <div className="controls lg:h-24 h-20 flex flex-col items-center justify-between p-4 bg-[#212121] text-white fixed lg:bottom-0 bottom-14 left-0 right-0 shadow-lg z-10">
       <div className="flex items-center gap-4 fixed right-8 bottom-20 sm:relative sm:right-auto sm:bottom-auto">
         <p className="md:flex hidden">{current}</p>
-        <BsShuffle className="text-xl cursor-pointer text-gray-400 md:flex hidden" />
+        <BsShuffle className="text-xl cursor-pointer text-gray-400 sm:flex hidden" />
         <BsFillSkipStartCircleFill
           onClick={skipBegin}
           className="text-2xl cursor-pointer text-gray-200"
@@ -139,7 +150,12 @@ const Controls: React.FC<IControls> = ({
           onClick={skipEnd}
           className="text-2xl cursor-pointer text-gray-200"
         />
-        <BsRepeat className="text-xl cursor-pointer text-gray-400 md:flex hidden" />
+        <BsRepeat
+          onClick={toggleRepeatMode}
+          className={`text-xl cursor-pointer sm:flex hidden ${
+            repeatMode === 'off' ? 'text-gray-400' : 'text-gray-200'
+          }`}
+        />
         <p className="md:flex hidden">{duration}</p>
       </div>
       <div className="flex-col items-center lg:mb-4 w-1/2 sm:flex hidden">
@@ -164,25 +180,27 @@ const Controls: React.FC<IControls> = ({
             className="lg:w-16 lg:h-16 w-12 h-12 rounded-sm"
           />
           <div className="flex flex-col text-start">
-            <span className="text-sm font-bold">{song.article}</span>
+            <div className="flex gap-2">
+              <span className="text-sm font-bold">{song.article}</span>
+              <div className="flex gap-2">
+                {isFavorite ? (
+                  <FaHeart
+                    className="text-white cursor-pointer"
+                    onClick={toggleFavorite}
+                  />
+                ) : (
+                  <FaRegHeart
+                    className="text-white cursor-pointer"
+                    onClick={toggleFavorite}
+                  />
+                )}
+                <PiDotsThreeOutlineFill className="text-white cursor-pointer hidden sm:flex"/>
+              </div>
+            </div>
             <span className="text-xs text-gray-400">{song.author}</span>
             <span className="text-xs text-gray-500 lg:flex hidden">
               PLAYING FROM: {albumName}
             </span>
-          </div>
-          <div className="flex gap-2 fixed lg:left-48 left-44">
-            {isFavorite ? (
-              <FaHeart
-                className="text-white cursor-pointer"
-                onClick={toggleFavorite}
-              />
-            ) : (
-              <FaRegHeart
-                className="text-white cursor-pointer"
-                onClick={toggleFavorite}
-              />
-            )}
-            <PiDotsThreeOutlineFill className="text-white cursor-pointer hidden sm:flex" />
           </div>
         </div>
       )}

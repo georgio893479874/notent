@@ -1,7 +1,6 @@
 import { ISongInfoModal } from "@/interfaces/SongInfoModalInterface";
 import { useEffect, useState } from "react";
 import { BsFillPauseCircleFill, BsFillPlayCircleFill, BsSkipBackwardFill, BsSkipForwardFill, BsChevronDown } from "react-icons/bs";
-import Sidebar from "../sidebar/Sidebar";
 
 const SongInfoModal: React.FC<ISongInfoModal> = ({ 
   song, 
@@ -57,7 +56,7 @@ const SongInfoModal: React.FC<ISongInfoModal> = ({
                   ref={progressBar} 
                   className="w-full mx-2 bg-gray-200 dark:bg-gray-600"
                 />
-                <span className="text-sm dark:text-gray-400">{song.duration}</span>
+                <span className="text-sm dark:text-gray-400">0</span>
               </div>
               <div className="flex items-center justify-center mt-4">
                 <button onClick={skipBegin} className="text-3xl mx-2 dark:text-gray-300">
@@ -75,7 +74,6 @@ const SongInfoModal: React.FC<ISongInfoModal> = ({
         </div>
       ) : (
         <div className="fixed inset-0 flex flex-col bg-black bg-opacity-70 dark:bg-opacity-80 z-50" style={{marginLeft: "20%"}}>
-          <Sidebar />
           <div className="flex flex-row h-full relative">
             <div className="flex-1 bg-white dark:bg-gray-900 text-black dark:text-white flex flex-col justify-center items-center p-8">
               <button onClick={onClose} className="absolute top-4 left-4 text-gray-700 dark:text-gray-300 text-2xl">
@@ -98,7 +96,7 @@ const SongInfoModal: React.FC<ISongInfoModal> = ({
                     ref={progressBar} 
                     className="w-full mx-2 bg-gray-200 dark:bg-gray-600"
                   />
-                  <span className="text-sm">{song.duration}</span>
+                  <span className="text-sm">0</span>
                 </div>
                 <div className="flex items-center justify-center mt-4">
                   <button onClick={skipBegin} className="text-3xl mx-2 dark:text-gray-300">

@@ -4,10 +4,10 @@ interface IControlsService {
     songs: ISong[];
     currentSongIndex: number;
     setCurrentSongIndex: React.Dispatch<React.SetStateAction<number>>;
+    repeatMode: 'off' | 'one' | 'all';
 }
 
 export interface ISong {
-    duration: string;
     id: number;
     created_at: string;
     audio_link: string;
@@ -18,7 +18,7 @@ export interface ISong {
     author_id: string;
 }
 
-const useControlsService = ({ songs, currentSongIndex, setCurrentSongIndex }: IControlsService) => {
+const useControlsService = ({ songs, currentSongIndex, setCurrentSongIndex, repeatMode }: IControlsService) => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
@@ -47,7 +47,7 @@ const useControlsService = ({ songs, currentSongIndex, setCurrentSongIndex }: IC
 
     useEffect(() => {
         const audio = audioPlayer.current;
-    
+
         if ('mediaSession' in navigator && songs.length > 0) {
             navigator.mediaSession.metadata = new window.MediaMetadata({
                 title: songs[currentSongIndex].article,
@@ -61,43 +61,41 @@ const useControlsService = ({ songs, currentSongIndex, setCurrentSongIndex }: IC
                     { src: songs[currentSongIndex].image_link, sizes: '512x512', type: 'image/png' },
                 ]
             });
-    
+
             navigator.mediaSession.setActionHandler('play', () => {
                 audio.play();
-                
+
                 setIsPlaying(true);
             });
-    
+
             navigator.mediaSession.setActionHandler('pause', () => {
                 audio.pause();
 
                 setIsPlaying(false);
             });
-    
+
             navigator.mediaSession.setActionHandler('previoustrack', () => {
                 audio.currentTime = 0;
-                
                 if (currentSongIndex > 0) {
                     setCurrentSongIndex(currentSongIndex - 1);
                 }
             });
-    
+
             navigator.mediaSession.setActionHandler('nexttrack', () => {
                 audio.currentTime = 0;
-
                 if (currentSongIndex < songs.length - 1) {
                     setCurrentSongIndex(currentSongIndex + 1);
                 }
             });
-    
+
             navigator.mediaSession.setActionHandler('seekbackward', () => {
                 audio.currentTime = Math.max(audio.currentTime - 10, 0);
             });
-    
+
             navigator.mediaSession.setActionHandler('seekforward', () => {
                 audio.currentTime = Math.min(audio.currentTime + 10, audio.duration);
             });
-    
+
             navigator.mediaSession.setActionHandler('stop', () => {
                 audio.pause();
                 audio.currentTime = 0;
@@ -105,7 +103,7 @@ const useControlsService = ({ songs, currentSongIndex, setCurrentSongIndex }: IC
                 setIsPlaying(false);
             });
         }
-    
+
         return () => {
             if ('mediaSession' in navigator) {
                 navigator.mediaSession.metadata = null;
@@ -136,28 +134,45 @@ const useControlsService = ({ songs, currentSongIndex, setCurrentSongIndex }: IC
         const audio = audioPlayer.current;
 
         const handleEnded = () => {
-            if (currentSongIndex < songs.length - 1) {
-                setCurrentSongIndex(currentSongIndex + 1);
+            if (repeatMode === 'one') {
+                audio.currentTime = 0;
+                audio.play();
+            } 
+            
+            else if (repeatMode === 'all') {
+                if (currentSongIndex < songs.length - 1) {
+                    setCurrentSongIndex(currentSongIndex + 1);
+                } 
+                
+                else {
+                    setCurrentSongIndex(0);
+                }
+
+                audio.currentTime = 0;
             } 
             
             else {
-                setCurrentSongIndex(0);
+                if (currentSongIndex < songs.length - 1) {
+                    setCurrentSongIndex(currentSongIndex + 1);
+                } 
+                
+                else {
+                    setCurrentSongIndex(0);
+                }
+                audio.currentTime = 0;
             }
-        
-            audioPlayer.current.currentTime = 0;
         };
-        
 
         audio.addEventListener("ended", handleEnded);
 
         return () => {
             audio.removeEventListener("ended", handleEnded);
         };
-    }, [currentSongIndex, setCurrentSongIndex, songs]);
+    }, [currentSongIndex, setCurrentSongIndex, songs, repeatMode]);
 
     const togglePlayPause = () => {
         const audio = audioPlayer.current;
-        
+
         if (isPlaying) {
             audio.pause();
         } 
@@ -165,7 +180,7 @@ const useControlsService = ({ songs, currentSongIndex, setCurrentSongIndex }: IC
         else {
             audio.play();
         }
-        
+
         setIsPlaying(!isPlaying);
     };
 
@@ -210,11 +225,8 @@ const useControlsService = ({ songs, currentSongIndex, setCurrentSongIndex }: IC
         skipEnd,
         currentFormatted: formatTime(currentTime),
         durationFormatted: formatTime(duration),
+        repeatMode,
     };
 };
 
 export default useControlsService;
-
-
-
-

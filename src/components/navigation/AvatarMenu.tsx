@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import UserAvatar from './UserAvatar';
+import UserAvatar from '../profile/UserAvatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
@@ -79,7 +79,7 @@ const AvatarMenu = () => {
   };
 
   return (
-    <div className='fixed top-1 right-2'>
+    <div>
       <IconButton onClick={handleClick} size="small">
         {!isLoading && (
           <UserAvatar

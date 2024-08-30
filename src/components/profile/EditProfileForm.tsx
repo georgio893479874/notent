@@ -1,5 +1,4 @@
 import { forwardRef } from 'react';
-import Sidebar from '../sidebar/Sidebar';
 import AvatarUpload from './AvatarUpload';
 import { IEditProfileForm } from '@/interfaces/EditProfileInterface';
 
@@ -19,7 +18,6 @@ const EditProfileForm = forwardRef<HTMLInputElement, IEditProfileForm> (
   ) => {
     return (
       <>
-        <Sidebar />
         <div className="max-w-md mx-auto p-6 bg-white dark:bg-gray-900 rounded-xl shadow-xl">
           <h1 className="text-3xl font-extrabold mb-6 text-gray-900 dark:text-gray-100">Edit Profile</h1>
           <div className="flex flex-col items-center mb-8">

@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
-import Player from '@/components/player/Player';
-import Sidebar from '@/components/sidebar/Sidebar';
-import { supabase } from '@/services/SupabaseClientService';
+import { useEffect, useState } from "react";
 import { Link, useParams } from 'react-router-dom';
+import { supabase } from '@/services/SupabaseClientService';
 import { ISong } from "@/services/ControlsService";
-import NavigationButtons from "@/components/NavigationButtons/NavigationButtons";
+import { usePlayer } from '@/context/PlayerContext';
+
 export interface Album {
   album_id: string;
   album_article: string;
@@ -19,6 +18,7 @@ interface Song extends ISong {
   author: string;
   image_link: string;
   author_id: string;
+  duration: number;
 }
 
 interface Author {
@@ -34,7 +34,7 @@ const Album: React.FC = () => {
   const [author, setAuthor] = useState<Author | null>(null);
   const [isFavorite, setIsFavorite] = useState(false);
   const [userId, setUserId] = useState<string>("");
-  const [selectedSong, setSelectedSong] = useState<ISong | undefined>(undefined);
+  const { setSelectedSong } = usePlayer();
 
   useEffect(() => {
     const fetchAlbum = async () => {
@@ -54,7 +54,20 @@ const Album: React.FC = () => {
         throw songsError;
       } 
 
-      setSongs(songsData || []);
+      const songsWithDuration = await Promise.all(
+        (songsData || []).map(async (song: Song) => {
+          const audio = new Audio(song.audio_link);
+
+          await new Promise<void>((resolve) => {
+            audio.addEventListener('loadedmetadata', () => {
+              resolve();
+            });
+          });
+          return { ...song, duration: audio.duration };
+        })
+      );
+
+      setSongs(songsWithDuration);
     };
 
     const fetchAuthor = async () => {
@@ -110,7 +123,7 @@ const Album: React.FC = () => {
     } 
 
     else if (data) {
-      setIsFavorite(false);
+      setIsFavorite(true);
     }
   }
 
@@ -137,26 +150,31 @@ const Album: React.FC = () => {
   }
 
   const totalSongs = songs.length;
-  const totalDurationInSeconds = songs.reduce((total, song) => total + Number(song.duration || 0), 0);
+  const totalDurationInSeconds = songs.reduce((total, song) => total + song.duration, 0);
   
   const formatDuration = (totalSeconds: number) => {
     const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
+    const seconds = Math.round(totalSeconds % 60);
 
     return `${minutes} min ${seconds} s`;
+  };
+
+  const formatSongDuration = (duration: number) => {
+    const minutes = Math.floor(duration / 60);
+    const seconds = Math.round(duration % 60);
+
+    return `${minutes}:${seconds}`;
   };
 
   if (!album) return null;
 
   return (
     <>
-      <NavigationButtons/>
-      <Sidebar />
       <div className="bg-[#323131] text-white flex flex-col items-center py-32 h-screen overflow-y-auto px-4">
         <div className="text-center mb-6 sm:mb-8">
           <img
             src={album.album_photo}
-            className="w-56 h-56 sm:w-52 sm:h-52 object-cover mx-auto mb-4"
+            className="w-56 h-56 sm:w-72 sm:h-72 object-cover mx-auto mb-4"
           />
           <h1 className="text-2xl sm:text-4xl font-bold">{album.album_article}</h1>
           <h2 className="text-sm sm:text-lg text-gray-400">
@@ -175,19 +193,21 @@ const Album: React.FC = () => {
             {songs.map((song, key) => (
               <li
                 key={song.id}
-                className="flex flex-col sm:flex-row justify-between items-center bg-[#2c2b2b] p-3 sm:p-4 rounded-lg cursor-pointer"
+                className="flex flex-row justify-between items-center bg-[#2c2b2b] p-3 sm:p-4 rounded-lg cursor-pointer"
                 onClick={() => setSelectedSong(song)}
               >
                 <div className="flex items-center space-x-2 sm:space-x-4">
                   <span className="text-gray-400 text-sm sm:text-base">{key + 1}</span>
                   <h3 className="text-base sm:text-lg">{song.article}</h3>
                 </div>
+                <span className="text-gray-400 text-sm sm:text-base">
+                  {formatSongDuration(song.duration)}
+                </span>
               </li>
             ))}
           </ul>
         </div>
       </div>
-      <Player selectedSong={selectedSong}/>
     </>
   );
 };

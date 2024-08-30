@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/services/SupabaseClientService";
-import Sidebar from "@/components/sidebar/Sidebar";
 
 const Settings = () => {
     const [darkMode, setDarkMode] = useState(() => {
@@ -75,7 +74,6 @@ const Settings = () => {
 
     return (
       <>
-        <Sidebar/>
         <div className="settings p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md mx-4 my-6 sm:mx-auto sm:max-w-xl">
           <h2 className="text-3xl font-semibold mb-6 dark:text-white">Theme Settings</h2>
           <div className="setting-item mb-6">

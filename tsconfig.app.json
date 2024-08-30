@@ -20,7 +20,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "src/components/NavigationButtons/NavigationButtons.tsx"]
+  "include": ["src", "src/components/navigation/NavigationHeader.tsx"]
 }
 
 
