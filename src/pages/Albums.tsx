@@ -50,7 +50,7 @@ const Albums: React.FC = () => {
     }, []);
 
     return (
-        <div className="p-4 md:p-8">
+        <div className="p-4 md:p-8 lg:ml-64 2xl:ml-0 mt-20">
             <div className="max-w-5xl mx-auto">
                 <h1 className="text-2xl font-bold mb-4 md:mb-6 text-left text-white">Favorite Albums</h1>
                 <div className="flex flex-col space-y-4">
@@ -63,7 +63,7 @@ const Albums: React.FC = () => {
                             <img
                                 src={album.album_photo}
                                 alt={album.album_article}
-                                className="w-64 h-64 object-cover rounded-md"
+                                className="lg:w-64 w-44 object-cover rounded-md"
                             />
                             <div className="flex flex-col text-left">
                                 <h3 className="text-white text-xl font-semibold">{album.album_article}</h3>

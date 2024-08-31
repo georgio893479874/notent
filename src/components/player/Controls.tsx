@@ -206,11 +206,6 @@ const Controls: React.FC<IControls> = ({
       )}
       <div className="fixed right-4 gap-4 lg:mt-5 lg:flex hidden">
         <div className="flex gap-4 items-center">
-          <IoVolumeHighOutline
-            className="text-xl cursor-pointer text-gray-200"
-            size={24}
-            onClick={toggleVolumeSlider}
-          />
           {showVolumeSlider && (
             <input
               type="range"
@@ -222,6 +217,11 @@ const Controls: React.FC<IControls> = ({
               className="w-24 h-1 bg-gray-500 rounded-full appearance-none cursor-pointer"
             />
           )}
+          <IoVolumeHighOutline
+            className="text-xl cursor-pointer text-gray-200"
+            size={24}
+            onClick={toggleVolumeSlider}
+          />
           <IoLaptopOutline
             className="text-xl cursor-pointer text-gray-200"
             size={24}

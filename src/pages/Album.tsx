@@ -170,7 +170,7 @@ const Album: React.FC = () => {
 
   return (
     <>
-      <div className="bg-[#323131] text-white flex flex-col items-center py-32 h-screen overflow-y-auto px-4">
+      <div className="bg-[#323131] text-white flex flex-col items-center py-32 h-screen overflow-y-auto px-4 mt-20">
         <div className="text-center mb-6 sm:mb-8">
           <img
             src={album.album_photo}

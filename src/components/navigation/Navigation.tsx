@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoArrowBackOutline } from "react-icons/io5";
 import { PiBellRingingFill } from "react-icons/pi";
+import AvatarMenu from "./AvatarMenu";
 
 interface IArtist {
   artist_id: string;
@@ -47,7 +48,7 @@ const Navigation = () => {
   );
 
   return (
-    <div className="flex items-center p-6 bg-cover bg-center fixed top-0 left-0 w-full z-50" style={{ backgroundImage: "url('/path-to-background-image.jpg')" }}>
+    <div className="flex items-center p-6 fixed top-0 left-0 w-full z-50">
       <div className="w-full max-w-[550px] mx-auto">
         <div className="flex gap-4">
           <button
@@ -70,6 +71,7 @@ const Navigation = () => {
           <button className="p-3 bg-black bg-opacity-40 rounded-2xl transition duration-200 hidden md:flex">
             <PiBellRingingFill size={25} style={{ color: "white" }} />
           </button>
+          <AvatarMenu/>
         </div>
         <ul className="list-none mt-4 space-y-2 max-h-[400px] overflow-y-auto">
           {query && (filteredSongs.length > 0 || filteredArtists.length > 0) ? (

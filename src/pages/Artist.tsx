@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { supabase } from "@/services/SupabaseClientService";
-import { FaPlay } from "react-icons/fa";
+import { FaPlay, FaPause } from "react-icons/fa";
+import { usePlayer } from "@/context/PlayerContext";
 
 export interface IArtist {
   artist_id: string;
@@ -23,10 +24,11 @@ const Artist = () => {
   const [albums, setAlbums] = useState<IAlbum[]>([]);
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const [userId, setUserId] = useState<string>("");
+  const [playing, setPlaying] = useState<boolean>(false);
+  const { setSelectedSong, setIsPlaying } = usePlayer();
   const showAll = false;
 
   const sortedAlbums = [...albums].sort((a, b) => new Date(a.public_date).getTime() - new Date(b.public_date).getTime());
-
   const visibleAlbums = showAll ? sortedAlbums : sortedAlbums.slice(0, 5);
 
   useEffect(() => {
@@ -35,7 +37,6 @@ const Artist = () => {
 
       if (error) {
         throw error;
-        return;
       }
 
       if (data.user) {
@@ -74,7 +75,7 @@ const Artist = () => {
     }
 
     fetchArtistData();
-  }, [id]);
+  }, [id, userId]);
 
   const handleFollow = async () => {
     const { error } = await supabase.from('Followings').insert([
@@ -105,11 +106,30 @@ const Artist = () => {
     }
   };
 
+  const handlePlay = async () => {
+    const { data: songs, error } = await supabase.from('Songs').select('*').eq('author_id', id);
+
+    if (error) throw error;
+
+    if (songs && songs.length > 0) {
+      const shuffledSongs = songs.sort(() => Math.random() - 0.5);
+
+      setSelectedSong(shuffledSongs[0]);
+      setIsPlaying(true);
+      setPlaying(true);
+    }
+  };
+
+  const handlePause = () => {
+    setIsPlaying(false);
+    setPlaying(false);
+  };
+
   if (!artist) return null;
 
   return (
     <>
-      <div className="min-h-screen text-white flex flex-col lg:ml-64 p-6">
+      <div className="min-h-screen text-white flex flex-col lg:ml-64 p-6 mt-20">
         <div className="relative mb-8 w-full h-56 lg:h-80 bg-gray-800 overflow-hidden rounded-lg">
           <img
             className="w-full h-full object-cover"
@@ -120,8 +140,11 @@ const Artist = () => {
               <h1 className="text-xl lg:text-7xl font-bold">{artist.artist_name}</h1>
             </div>
             <div className="flex items-center space-x-4">
-              <button className="bg-green-500 text-black p-4 rounded-full font-semibold">
-                <FaPlay/>
+              <button 
+                className="bg-green-500 text-black p-4 rounded-full font-semibold"
+                onClick={playing ? handlePause : handlePlay}
+              >
+                {playing ? <FaPause /> : <FaPlay />}
               </button>
               <button
                 className={`px-4 py-2 rounded-full ${

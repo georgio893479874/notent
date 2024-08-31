@@ -79,7 +79,7 @@ const AvatarMenu = () => {
   };
 
   return (
-    <div>
+    <div className='md:fixed top-7 right-4'>
       <IconButton onClick={handleClick} size="small">
         {!isLoading && (
           <UserAvatar

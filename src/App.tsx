@@ -7,6 +7,8 @@ import { Register, SignIn, DefaultRoute, Profile, Settings, EditProfile, Portfol
 import PlayerWrapper from './components/player/PlayerWrapper';
 import { PlayerProvider } from './context/PlayerContext';
 import SidebarWrapper from './components/sidebar/SidebarWrapper';
+import AllArtistAlbums from './pages/AllArtistAlbums';
+import NavigationWrapper from './components/navigation/NavigationWrapper';
 
 function App() {
   useEffect(() => {
@@ -25,25 +27,28 @@ function App() {
       <PlayerProvider>
         <SidebarWrapper>
           <PlayerWrapper>
-            <div className="app">
-              <KeepAliveComponent />
-              <AuthWrapper>
-                <Routes>
-                  <Route path="/" element={<Portfolio/>}/>
-                  <Route path="/register" element={<Register/>}/>
-                  <Route path="/signin" element={<SignIn/>}/>
-                  <Route path="/player" element={<DefaultRoute/>}/>
-                  <Route path="/profile" element={<Profile/>}/>
-                  <Route path="/settings" element={<Settings/>}/>
-                  <Route path="/artist/:id" element={<Artist/>}/>
-                  <Route path="/editprofile" element={<EditProfile/>}/>
-                  <Route path="/radio" element={<Radio/>}/>
-                  <Route path="/albums" element={<Albums/>}/>
-                  <Route path="/album/:albumId" element={<Album/>}/>
-                  <Route path="/favorites" element={<Favorites/>}/>
-                </Routes>
-              </AuthWrapper>
-            </div>
+            <NavigationWrapper>
+              <div className="app">
+                <KeepAliveComponent/>
+                <AuthWrapper>
+                  <Routes>
+                    <Route path="/" element={<Portfolio/>}/>
+                    <Route path="/register" element={<Register/>}/>
+                    <Route path="/signin" element={<SignIn/>}/>
+                    <Route path="/player" element={<DefaultRoute/>}/>
+                    <Route path="/profile" element={<Profile/>}/>
+                    <Route path="/settings" element={<Settings/>}/>
+                    <Route path="/artist/:id" element={<Artist/>}/>
+                    <Route path="/editprofile" element={<EditProfile/>}/>
+                    <Route path="/radio" element={<Radio/>}/>
+                    <Route path="/albums" element={<Albums/>}/>
+                    <Route path="/album/:albumId" element={<Album/>}/>
+                    <Route path="/favorites" element={<Favorites/>}/>
+                    <Route path="/all-albums/:albumId" element={<AllArtistAlbums/>}/>
+                  </Routes>
+                </AuthWrapper>
+              </div>
+            </NavigationWrapper>
           </PlayerWrapper>
         </SidebarWrapper>
       </PlayerProvider>
