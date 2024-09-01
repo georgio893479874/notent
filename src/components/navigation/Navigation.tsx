@@ -48,7 +48,7 @@ const Navigation = () => {
   );
 
   return (
-    <div className="flex items-center p-6 absolute top-0 left-0 w-full z-50">
+    <div className="flex items-center p-6 fixed top-0 left-0 w-full z-50">
       <div className="w-full max-w-[550px] mx-auto">
         <div className="flex gap-4">
           <button
