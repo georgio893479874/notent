@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/services/SupabaseClientService';
-import { ISong } from "@/services/ControlsService";
+import { ISong } from "@/hooks/UseControls";
 import { usePlayer } from '@/context/PlayerContext';
 
 interface Song extends ISong {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import useControlsService, { ISong } from "@/services/ControlsService";
+import useControls, { ISong } from "@/hooks/UseControls";
 import { supabase } from "@/services/SupabaseClientService";
 import Controls from "./Controls";
 import SongInfoModal from "../song/SongInfoModal";
@@ -19,7 +19,6 @@ const Player: React.FC = () => {
   useEffect(() => {
     if (selectedSong) {
       const index = songs.findIndex(song => song.id === selectedSong.id);
-
       if (index !== -1) {
         setCurrentSongIndex(index);
       }
@@ -28,11 +27,10 @@ const Player: React.FC = () => {
 
   const fetchSongs = async () => {
     const { data, error } = await supabase.from("Songs").select("*");
-
     if (error) {
-      throw error;
+      console.error("Error fetching songs:", error);
+      return;
     }
-
     setSongs(data || []);
   };
 
@@ -49,7 +47,7 @@ const Player: React.FC = () => {
     currentFormatted,
     durationFormatted,
     repeatMode: controlsRepeatMode,
-  } = useControlsService({ songs, currentSongIndex, setCurrentSongIndex, repeatMode });
+  } = useControls({ songs, currentSongIndex, setCurrentSongIndex, repeatMode });
 
   return (
     <div className="flex flex-col items-center justify-center p-4">
@@ -93,4 +91,3 @@ const Player: React.FC = () => {
 };
 
 export default Player;
-

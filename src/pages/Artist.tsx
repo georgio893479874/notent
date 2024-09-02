@@ -25,87 +25,103 @@ const Artist = () => {
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const [userId, setUserId] = useState<string>("");
   const [playing, setPlaying] = useState<boolean>(false);
-  const { setSelectedSong, setIsPlaying } = usePlayer();
+  const { setSelectedSong } = usePlayer();
+  const [isMobile, setIsMobile] = useState(false);
   const showAll = false;
 
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const sortedAlbums = [...albums].sort((a, b) => new Date(a.public_date).getTime() - new Date(b.public_date).getTime());
-  const visibleAlbums = showAll ? sortedAlbums : sortedAlbums.slice(0, 5);
+  const visibleAlbums = showAll ? sortedAlbums : sortedAlbums.slice(0, isMobile ? 3 : 5);
 
   useEffect(() => {
     const fetchArtistData = async () => {
-      const { data, error } = await supabase.auth.getUser();
-
-      if (error) {
+      try {
+        const { data: userData, error: userError } = await supabase.auth.getUser();
+    
+        if (userError) {
+          throw userError;
+        }
+    
+        if (userData.user) {
+          setUserId(userData.user.id);
+        }
+    
+        const { data: artistData, error: artistError } = await supabase.from('Artists').select('*').eq('artist_id', id).single();
+    
+        if (artistError) {
+          throw artistError;
+        } 
+        
+        setArtist(artistData);
+    
+        const { data: albumData, error: albumError } = await supabase.from('Albums').select('*').eq('album_author_id', id);
+    
+        if (albumError) {
+          throw albumError;
+        } 
+        
+        setAlbums(albumData);
+    
+        const { data: followingData, error: followingError } = await supabase.from('Followings').select('*').eq('user_id', userId).eq('artist_id', id);
+    
+        if (followingError) {
+          throw followingError;
+        }
+    
+        setIsFollowing(followingData.length > 0);
+      } 
+      
+      catch (error) {
         throw error;
       }
-
-      if (data.user) {
-        setUserId(data.user.id);
-      }
-
-      const { data: artistData, error: artistError } = await supabase.from('Artists').select('*').eq('artist_id', id).single();
-
-      if (artistError) {
-        throw artistError;
-      } 
-      
-      else {
-        setArtist(artistData);
-      }
-
-      const { data: albumData, error: albumError } = await supabase.from('Albums').select('*').eq('album_author_id', id);
-
-      if (albumError) {
-        throw albumError;
-      } 
-      
-      else {
-        setAlbums(albumData);
-      }
-
-      const { data: followingData, error: followingError } = await supabase.from('Followings').select('*').eq('user_id', userId).eq('artist_id', id).single();
-
-      if (followingError) {
-        throw followingError;
-      }
-
-      if (followingData) {
-        setIsFollowing(true);
-      }
-    }
+    };
 
     fetchArtistData();
   }, [id, userId]);
 
   const handleFollow = async () => {
-    const { error } = await supabase.from('Followings').insert([
-      { 
-        user_id: userId, 
-        artist_id: id,
-      },
-    ]);
-
-    if (error) {
-      throw error;
-    } 
-    
-    else {
+    try {
+      const { error } = await supabase.from('Followings').insert([
+        { 
+          user_id: userId, 
+          artist_id: id,
+        },
+      ]);
+  
+      if (error) {
+        throw error;
+      } 
+  
       setIsFollowing(true);
-    }
-  };
-
-  const handleUnfollow = async () => {
-    const { error } = await supabase.from('Followings').delete().eq('user_id', userId).eq('artist_id', id);
-
-    if (error) {
-      throw error;
     } 
     
-    else {
-      setIsFollowing(false);
+    catch (error) {
+      throw error;
     }
   };
-
+  
+  const handleUnfollow = async () => {
+    try {
+      const { error } = await supabase.from('Followings').delete().eq('user_id', userId).eq('artist_id', id);
+  
+      if (error) {
+        throw error;
+      } 
+  
+      setIsFollowing(false);
+    } 
+    
+    catch (error) {
+      throw error;
+    }
+  };
+  
   const handlePlay = async () => {
     const { data: songs, error } = await supabase.from('Songs').select('*').eq('author_id', id);
 
@@ -115,13 +131,11 @@ const Artist = () => {
       const shuffledSongs = songs.sort(() => Math.random() - 0.5);
 
       setSelectedSong(shuffledSongs[0]);
-      setIsPlaying(true);
       setPlaying(true);
     }
   };
 
   const handlePause = () => {
-    setIsPlaying(false);
     setPlaying(false);
   };
 
@@ -204,3 +218,4 @@ const Artist = () => {
 };
 
 export default Artist;
+

@@ -40,30 +40,42 @@ const Controls: React.FC<IControls> = ({
   useEffect(() => {
     const fetchAlbumName = async () => {
       if (song?.album_id) {
-        const { data, error } = await supabase.from("Albums").select("album_article").eq("album_id", song.album_id).single();
+        try {
+          const { data, error } = await supabase.from("Albums").select("album_article").eq("album_id", song.album_id).single();
 
-        if (error) {
+          if (error) {
+            throw error;
+            return;
+          }
+
+          setAlbumName(data?.album_article || "");
+        } 
+        
+        catch (error) {
           throw error;
-          return;
         }
-
-        setAlbumName(data?.album_article || "");
       }
     };
 
     const checkIfFavorite = async () => {
-      const user = await supabase.auth.getUser();
-      const userId = user.data.user?.id;
+      try {
+        const user = await supabase.auth.getUser();
+        const userId = user.data.user?.id;
 
-      if (userId && song?.id) {
-        const { data, error } = await supabase.from("FavoriteSongs").select("*").eq("user_id", userId).eq("song_id", song.id).single();
+        if (userId && song?.id) {
+          const { data, error } = await supabase.from("FavoriteSongs").select("*").eq("user_id", userId).eq("song_id", song.id);
 
-        if (error) {
-          throw error;
-          return;
+          if (error) {
+            throw error;
+            return;
+          }
+
+          setIsFavorite(data.length > 0);
         }
-
-        setIsFavorite(!!data);
+      } 
+      
+      catch (error) {
+        throw error;
       }
     };
 
@@ -72,34 +84,42 @@ const Controls: React.FC<IControls> = ({
   }, [song]);
 
   const toggleFavorite = async () => {
-    const user = await supabase.auth.getUser();
-    const userId = user.data.user?.id;
+    try {
+      const user = await supabase.auth.getUser();
+      const userId = user.data.user?.id;
 
-    if (!userId || !song?.id) return;
+      if (!userId || !song?.id) return;
 
-    if (isFavorite) {
-      const { error } = await supabase.from("FavoriteSongs").delete().eq("user_id", userId).eq("song_id", song.id);
+      if (isFavorite) {
+        const { error } = await supabase.from("FavoriteSongs").delete().eq("user_id", userId).eq("song_id", song.id);
 
-      if (error) {
-        throw error;
-        return;
+        if (error) {
+          throw error;
+          return;
+        }
+
+        setIsFavorite(false);
+      } 
+      
+      else {
+        const { error } = await supabase.from("FavoriteSongs").insert(
+          { 
+            user_id: userId, 
+            song_id: song.id 
+          }
+        );
+
+        if (error) {
+          throw error;
+          return;
+        }
+
+        setIsFavorite(true);
       }
-
-      setIsFavorite(false);
     } 
     
-    else {
-      const { error } = await supabase.from("FavoriteSongs").insert({
-        user_id: userId,
-        song_id: song.id,
-      });
-
-      if (error) {
-        throw error;
-        return;
-      }
-
-      setIsFavorite(true);
+    catch (error) {
+      throw error;
     }
   };
 

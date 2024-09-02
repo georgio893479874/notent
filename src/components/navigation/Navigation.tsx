@@ -1,10 +1,10 @@
-import { ISong } from "@/services/ControlsService";
 import { supabase } from "@/services/SupabaseClientService";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoArrowBackOutline } from "react-icons/io5";
 import { PiBellRingingFill } from "react-icons/pi";
 import AvatarMenu from "./AvatarMenu";
+import { ISong } from "@/interfaces/SongInterface";
 
 interface IArtist {
   artist_id: string;
@@ -48,7 +48,7 @@ const Navigation = () => {
   );
 
   return (
-    <div className="flex items-center p-6 fixed top-0 left-0 w-full z-50">
+    <div className="flex items-center p-6 absolute top-0 left-0 w-full z-50">
       <div className="w-full max-w-[550px] mx-auto">
         <div className="flex gap-4">
           <button

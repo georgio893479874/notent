@@ -1,3 +1,4 @@
+import { ISong } from "@/interfaces/SongInterface";
 import { useRef, useState, useEffect } from "react";
 
 interface IControlsService {
@@ -7,18 +8,7 @@ interface IControlsService {
     repeatMode: 'off' | 'one' | 'all';
 }
 
-export interface ISong {
-    id: number;
-    created_at: string;
-    audio_link: string;
-    author: string;
-    article: string;
-    image_link: string;
-    album_id: string;
-    author_id: string;
-}
-
-const useControlsService = ({ songs, currentSongIndex, setCurrentSongIndex, repeatMode }: IControlsService) => {
+const useControls = ({ songs, currentSongIndex, setCurrentSongIndex, repeatMode }: IControlsService) => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
@@ -159,6 +149,7 @@ const useControlsService = ({ songs, currentSongIndex, setCurrentSongIndex, repe
                 else {
                     setCurrentSongIndex(0);
                 }
+
                 audio.currentTime = 0;
             }
         };
@@ -229,4 +220,4 @@ const useControlsService = ({ songs, currentSongIndex, setCurrentSongIndex, repe
     };
 };
 
-export default useControlsService;
+export default useControls;

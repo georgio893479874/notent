@@ -1,4 +1,4 @@
-import { ISong } from "@/services/ControlsService";
+import { ISong } from "@/hooks/UseControls";
 
 interface IControls {
     type: string;

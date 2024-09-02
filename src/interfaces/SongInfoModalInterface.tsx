@@ -1,4 +1,4 @@
-import { ISong } from "@/services/ControlsService";
+import { ISong } from "./SongInterface";
 
 interface ISongInfoModal {
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;

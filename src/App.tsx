@@ -44,7 +44,7 @@ function App() {
                     <Route path="/albums" element={<Albums/>}/>
                     <Route path="/album/:albumId" element={<Album/>}/>
                     <Route path="/favorites" element={<Favorites/>}/>
-                    <Route path="/all-albums/:albumId" element={<AllArtistAlbums/>}/>
+                    <Route path="/all-albums/:authorId" element={<AllArtistAlbums/>}/>
                   </Routes>
                 </AuthWrapper>
               </div>

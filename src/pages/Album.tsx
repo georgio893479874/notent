@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from 'react-router-dom';
 import { supabase } from '@/services/SupabaseClientService';
-import { ISong } from "@/services/ControlsService";
 import { usePlayer } from '@/context/PlayerContext';
+import { ISong } from "@/interfaces/SongInterface";
 
 export interface Album {
   album_id: string;
@@ -11,17 +11,7 @@ export interface Album {
   album_photo: string;
   public_date: string;
 }
-
-interface Song extends ISong {
-  created_at: string;
-  audio_link: string;
-  author: string;
-  image_link: string;
-  author_id: string;
-  duration: number;
-}
-
-interface Author {
+export interface Author {
   artist_name: string;
   artist_id: string;
   artist_avatar: string;
@@ -30,7 +20,7 @@ interface Author {
 const Album: React.FC = () => {
   const { albumId } = useParams<{ albumId: string }>();
   const [album, setAlbum] = useState<Album | null>(null);
-  const [songs, setSongs] = useState<Song[]>([]);
+  const [songs, setSongs] = useState<ISong[]>([]);
   const [author, setAuthor] = useState<Author | null>(null);
   const [isFavorite, setIsFavorite] = useState(false);
   const [userId, setUserId] = useState<string>("");
@@ -55,7 +45,7 @@ const Album: React.FC = () => {
       } 
 
       const songsWithDuration = await Promise.all(
-        (songsData || []).map(async (song: Song) => {
+        (songsData || []).map(async (song: ISong) => {
           const audio = new Audio(song.audio_link);
 
           await new Promise<void>((resolve) => {
