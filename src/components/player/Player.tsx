@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import useControls, { ISong } from "@/hooks/UseControls";
+import useControls from "@/hooks/UseControls";
 import { supabase } from "@/services/SupabaseClientService";
 import Controls from "./Controls";
 import SongInfoModal from "../song/SongInfoModal";
 import { usePlayer } from '@/context/PlayerContext';
+import { ISong } from "@/interfaces/SongInterface";
 
 const Player: React.FC = () => {
   const { selectedSong } = usePlayer();

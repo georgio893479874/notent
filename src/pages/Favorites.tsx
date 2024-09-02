@@ -1,19 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/services/SupabaseClientService';
-import { ISong } from "@/hooks/UseControls";
 import { usePlayer } from '@/context/PlayerContext';
-
-interface Song extends ISong {
-  created_at: string;
-  audio_link: string;
-  author: string;
-  image_link: string;
-  author_id: string;
-  duration: number;
-}
+import { ISong } from '@/interfaces/SongInterface';
 
 const Favorites: React.FC = () => {
-  const [favoriteSongs, setFavoriteSongs] = useState<Song[]>([]);
+  const [favoriteSongs, setFavoriteSongs] = useState<ISong[]>([]);
   const { setSelectedSong } = usePlayer();
 
   useEffect(() => {
@@ -46,7 +37,7 @@ const Favorites: React.FC = () => {
           }
           
           const songsWithDuration = await Promise.all(
-            (songsData || []).map(async (song: Song) => {
+            (songsData || []).map(async (song: ISong) => {
               const audio = new Audio(song.audio_link);
 
               await new Promise<void>((resolve) => {
