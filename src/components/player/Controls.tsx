@@ -178,7 +178,7 @@ const Controls: React.FC<IControls> = ({
         />
         <p className="md:flex hidden">{duration}</p>
       </div>
-      <div className="flex-col items-center lg:mb-4 w-1/2 sm:flex hidden">
+      <div className="flex-col items-center lg:mb-4 w-full max-w-md sm:flex hidden">
         <input
           type={type}
           min={min}
@@ -186,7 +186,7 @@ const Controls: React.FC<IControls> = ({
           value={value}
           onChange={onChange}
           ref={progressBar}
-          className="w-3/4 h-1 bg-gray-500 rounded-full appearance-none cursor-pointer"
+          className="w-full h-1 bg-gray-500 rounded-full appearance-none cursor-pointer"
           style={{
             backgroundSize: `${(value / max) * 100}% 100%`,
             backgroundImage: "linear-gradient(to right, white, white)",
