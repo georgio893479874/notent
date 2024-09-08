@@ -31,6 +31,7 @@ const Controls: React.FC<IControls> = ({
   isPlaying,
   repeatMode,
   setRepeatMode,
+  setIsModalOpen
 }) => {
   const [albumName, setAlbumName] = useState("");
   const [isFavorite, setIsFavorite] = useState(false);
@@ -147,7 +148,10 @@ const Controls: React.FC<IControls> = ({
   };
 
   return (
-    <div className="controls lg:h-24 h-20 flex flex-col items-center justify-between p-4 bg-[#212121] text-white fixed lg:bottom-0 bottom-14 left-0 right-0 shadow-lg z-10">
+    <div 
+      className="controls lg:h-24 h-20 flex flex-col items-center justify-between p-4 bg-[#212121] text-white fixed lg:bottom-0 bottom-14 left-0 right-0 shadow-lg z-10"
+      onClick={() => { setIsModalOpen(true) }}
+    >
       <div className="flex items-center gap-4 fixed right-8 bottom-20 sm:relative sm:right-auto sm:bottom-auto">
         <p className="md:flex hidden">{current}</p>
         <BsShuffle className="text-xl cursor-pointer text-gray-400 sm:flex hidden" />
@@ -194,7 +198,7 @@ const Controls: React.FC<IControls> = ({
         />
       </div>
       {song && (
-        <div className="fixed left-4 gap-4 flex">
+        <div className="fixed left-4 flex items-center gap-4 z-20">
           <img
             src={song.image_link}
             className="lg:w-16 lg:h-16 w-12 h-12 rounded-sm"
@@ -223,8 +227,8 @@ const Controls: React.FC<IControls> = ({
             </span>
           </div>
         </div>
-      )}
-      <div className="fixed right-4 gap-4 lg:mt-5 lg:flex hidden">
+      )} 
+      <div className="fixed right-4 gap-4 items-center lg:mt-5 lg:flex hidden">
         <div className="flex gap-4 items-center">
           {showVolumeSlider && (
             <input

@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { supabase } from "@/services/SupabaseClientService";
 import { FaPlay, FaPause } from "react-icons/fa";
 import { usePlayer } from "@/context/PlayerContext";
+import { Helmet } from "react-helmet";
 
 export interface IArtist {
   artist_id: string;
@@ -143,6 +144,9 @@ const Artist = () => {
 
   return (
     <>
+      <Helmet>
+        <title>{artist.artist_name} | Notent</title>
+      </Helmet>
       <div className="min-h-screen text-white flex flex-col lg:ml-64 p-6 mt-20">
         <div className="relative mb-8 w-full h-56 lg:h-80 bg-gray-800 overflow-hidden rounded-lg">
           <img

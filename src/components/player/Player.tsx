@@ -29,7 +29,7 @@ const Player: React.FC = () => {
   const fetchSongs = async () => {
     const { data, error } = await supabase.from("Songs").select("*");
     if (error) {
-      console.error("Error fetching songs:", error);
+      throw error;
       return;
     }
     setSongs(data || []);
@@ -69,6 +69,7 @@ const Player: React.FC = () => {
         duration={durationFormatted}
         repeatMode={controlsRepeatMode}
         setRepeatMode={setRepeatMode}
+        setIsModalOpen={setIsModalOpen}
       />
       {isModalOpen && (
         <SongInfoModal 

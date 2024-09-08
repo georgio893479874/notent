@@ -17,6 +17,7 @@ interface IControls {
     current: string;
     repeatMode: "one" | "all" | "off";
     setRepeatMode: React.Dispatch<React.SetStateAction<"one" | "all" | "off">>;
+    setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export type { IControls };
