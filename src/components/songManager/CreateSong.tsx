@@ -7,7 +7,7 @@ interface ICreateSong {
   fileUrl?: string;
 }
 
-const CreateSong = ({ onClose, fileUrl }: ICreateSong) => {
+const CreateSong: React.FC<ICreateSong> = ({ onClose, fileUrl }) => {
   const [article, setArticle] = useState("");
   const [author, setAuthor] = useState("");
   const [songUrl, setSongUrl] = useState(fileUrl || "");

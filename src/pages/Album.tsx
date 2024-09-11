@@ -162,7 +162,7 @@ const Album: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>{album.album_article} - Album by {author?.artist_name} | Notent</title>
+        <title>{`${album.album_article} - Album by ${author?.artist_name} | Notent`}</title>
       </Helmet>
       <div className="bg-[#323131] text-white flex flex-col items-center py-32 h-screen overflow-y-auto px-4 mt-20">
         <div className="text-center mb-6 sm:mb-8">
