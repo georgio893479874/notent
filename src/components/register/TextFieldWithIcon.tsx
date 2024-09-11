@@ -1,4 +1,3 @@
-import React from 'react';
 import { ITextFieldWithIcon } from '@/interfaces/TextFieldWidthIcon';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 

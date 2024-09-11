@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import useControls from "@/hooks/UseControls";
 import { supabase } from "@/services/SupabaseClientService";
 import Controls from "./Controls";

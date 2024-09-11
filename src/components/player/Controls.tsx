@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BsFillPauseCircleFill,
   BsFillPlayCircleFill,
@@ -182,7 +182,7 @@ const Controls: React.FC<IControls> = ({
         />
         <p className="md:flex hidden">{duration}</p>
       </div>
-      <div className="flex-col items-center lg:mb-4 w-full max-w-md sm:flex hidden">
+      <div className="flex-col items-center lg:mb-4 w-full max-w-md md:flex hidden">
         <input
           type={type}
           min={min}
@@ -198,7 +198,7 @@ const Controls: React.FC<IControls> = ({
         />
       </div>
       {song && (
-        <div className="fixed left-4 flex items-center gap-4 z-20">
+        <div className="fixed lg:bottom-4 left-4 flex items-center gap-4 z-20">
           <img
             src={song.image_link}
             className="lg:w-16 lg:h-16 w-12 h-12 rounded-sm"
