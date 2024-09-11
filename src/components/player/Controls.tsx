@@ -198,7 +198,7 @@ const Controls: React.FC<IControls> = ({
         />
       </div>
       {song && (
-        <div className="block left-4 flex items-center gap-4 z-20">
+        <div className="block flex items-center gap-4 z-20">
           <img
             src={song.image_link}
             className="lg:w-16 lg:h-16 w-12 h-12 rounded-sm"
