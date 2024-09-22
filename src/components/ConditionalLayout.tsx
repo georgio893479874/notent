@@ -7,7 +7,7 @@ const ConditionalLayout: React.FC<{ children: React.ReactNode }> = ({ children }
   const location = useLocation();
 
   const noSidebarRoutes = ['/', '/signin', '/register'];
-  const noPlayerRoutes = ['/', '/signin', '/register', '/settings', '/profile', '/editprofile'];
+  const noPlayerRoutes = ['/', '/signin', '/register', '/settings', '/profile', '/editprofile', '/search'];
   const noNavigationRoutes = ['/', '/signin', '/register', '/settings', '/profile', '/editprofile'];
 
   const showSidebar = !noSidebarRoutes.includes(location.pathname);

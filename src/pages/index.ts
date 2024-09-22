@@ -10,3 +10,4 @@ export { default as DefaultRoute } from './DefaultRoute';
 export { default as SignIn } from './SignIn';
 export { default as Register } from './Register';
 export { default as Favorites } from './Favorites';
+export { default as Search } from './Search';
