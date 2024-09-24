@@ -13,12 +13,6 @@ const Search = () => {
     fetchGenres();
   }, []);
 
-  const fetchGenres = async () => {
-    const { data: genreData, error: genreError } = await supabase.from("Genres").select("*");
-    if (genreError) throw genreError;
-    setGenres(genreData || []);
-  };
-
   const handleSearch = async () => {
     const { data: songData } = await supabase.from("Songs").select("*").ilike("article", `%${query}%`);
     const { data: artistData } = await supabase.from("Artists").select("*").ilike("artist_name", `%${query}%`);
@@ -94,21 +88,6 @@ const Search = () => {
         placeholder="Search for songs, artists, or albums..."
         onKeyUp={handleSearch}
       />
-      <div className="categories">
-        {searchCategories.map((category) => (
-          <button
-            key={category.value}
-            onClick={() => setSelectedCategory(category.value)}
-          >
-            {category.value}
-          </button>
-        ))}
-      </div>
-      <div className="genres">
-        {genres.map((genre) => (
-          <button key={genre.id}>{genre.genre_name}</button>
-        ))}
-      </div>
       <ul>{query && getFilteredResults()}</ul>
     </div>
   );
