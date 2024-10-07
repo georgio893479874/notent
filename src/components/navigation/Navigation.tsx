@@ -115,7 +115,7 @@ const Navigation = () => {
             <IoArrowBackOutline size={26} style={{ color: "white" }}/>
           </button>
           <div className="relative w-full">
-            <Link to="search">
+            <Link to="/search">
               <input
                 type="text"
                 className="p-4 pl-10 bg-black bg-opacity-40 text-white placeholder-gray-500 rounded-2xl shadow-inner focus:outline-none focus:ring-2 focus:ring-white w-full backdrop-blur-lg"
