@@ -7,7 +7,7 @@ import { FaSearch } from "react-icons/fa";
 import AvatarMenu from "./AvatarMenu";
 import { ISong } from "@/interfaces/SongInterface";
 import { Album } from "@/pages/Album";
-import Link from "react-router-dom";
+import { Link } from "react-router-dom";
 
 interface IArtist {
   artist_id: string;
