@@ -7,6 +7,7 @@ import { FaSearch } from "react-icons/fa";
 import AvatarMenu from "./AvatarMenu";
 import { ISong } from "@/interfaces/SongInterface";
 import { Album } from "@/pages/Album";
+import Link from "react-router-dom";
 
 interface IArtist {
   artist_id: string;
@@ -44,13 +45,7 @@ const Navigation = () => {
     setSongs(songData || []);
     setArtists(artistData || []);
     setAlbums(albumData || []);
-  };
-
-  const handleSearch = () => {
-    if (location.pathname != "/search") {
-      if (query) navigate("/search");
-    }
-  };
+  }
 
   const filteredResults = {
     songs: songs.filter(song => song.article.toLowerCase().includes(query.toLowerCase())),
@@ -120,7 +115,7 @@ const Navigation = () => {
             <IoArrowBackOutline size={26} style={{ color: "white" }}/>
           </button>
           <div className="relative w-full">
-            <div onClick={handleSearch}>
+            <Link to="search">
               <input
                 type="text"
                 className="p-4 pl-10 bg-black bg-opacity-40 text-white placeholder-gray-500 rounded-2xl shadow-inner focus:outline-none focus:ring-2 focus:ring-white w-full backdrop-blur-lg"
@@ -131,7 +126,7 @@ const Navigation = () => {
                 className="absolute left-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-white" 
                 size={20} 
               />
-            </div>
+            </Link>
           </div>
           <button className="p-3 bg-black bg-opacity-40 rounded-2xl transition duration-200 hidden md:flex">
             <PiBellRingingFill size={25} style={{ color: "white" }}/>
