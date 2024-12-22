@@ -19,6 +19,7 @@ const SongInfoModal: React.FC<ISongInfoModal> = ({
   skipBegin, 
   skipEnd, 
   current,
+  duration
 }) => {
   const [isExiting, setIsExiting] = useState(false);
 
@@ -70,7 +71,7 @@ const SongInfoModal: React.FC<ISongInfoModal> = ({
                   backgroundImage: "linear-gradient(to right, white, white)",
                 }}
               />
-              <span className="text-xl p-4">0</span>
+              <span className="text-xl p-4">{duration}</span>
             </div>
             <div className="flex items-center justify-center">
               <button onClick={skipBegin}>

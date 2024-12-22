@@ -1,6 +1,6 @@
 import { supabase } from "@/services/SupabaseClientService";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { IoArrowBackOutline } from "react-icons/io5";
 import { PiBellRingingFill } from "react-icons/pi";
 import { FaSearch } from "react-icons/fa";
@@ -28,9 +28,11 @@ const Navigation = () => {
   }, []);
 
   const fetchSongsAndArtists = async () => {
-    const [{ data: songData, error: songError }, 
-            { data: artistData, error: artistError }, 
-            { data: albumData, error: albumError }] = await Promise.all([
+    const [
+      { data: songData, error: songError }, 
+      { data: artistData, error: artistError }, 
+      { data: albumData, error: albumError }
+    ] = await Promise.all([
       supabase.from("Songs").select("*"),
       supabase.from("Artists").select("*"),
       supabase.from("Albums").select("*"),
@@ -44,12 +46,6 @@ const Navigation = () => {
     setSongs(songData || []);
     setArtists(artistData || []);
     setAlbums(albumData || []);
-  };
-
-  const handleSearch = () => {
-    if (location.pathname != "/search") {
-      if (query) navigate("/search");
-    }
   };
 
   const filteredResults = {
@@ -72,9 +68,16 @@ const Navigation = () => {
         case "albums":
           return albums.map(renderAlbum);
         default:
-          return [...songs.map(renderSong), ...artists.map(renderArtist)];
+          return (
+            <>
+              {artists.map(renderArtist)}
+              {albums.map(renderAlbum)}
+            </>
+          );
       }
-    } else {
+    } 
+    
+    else {
       return (
         <>
           {songs.map(renderSong)}
@@ -85,7 +88,10 @@ const Navigation = () => {
   };
 
   const renderSong = (song: ISong) => (
-    <li key={song.id} className="flex items-center gap-4 p-4 bg-white bg-opacity-30 backdrop-blur-lg text-white rounded-lg shadow-lg hover:bg-opacity-50 transition duration-200">
+    <li 
+      key={song.id} 
+      className="flex items-center gap-4 p-4 bg-white bg-opacity-30 backdrop-blur-lg text-white rounded-lg shadow-lg hover:bg-opacity-50 transition duration-200"
+    >
       <img src={song.image_link} className="w-10 h-10 object-cover" alt={song.article} />
       <div className="flex flex-col flex-grow">
         <h3 className="text-lg font-semibold">{song.article}</h3>
@@ -95,21 +101,31 @@ const Navigation = () => {
   );
 
   const renderArtist = (artist: IArtist) => (
-    <li key={artist.artist_id} className="flex items-center gap-4 p-4 bg-white bg-opacity-30 backdrop-blur-lg text-white rounded-lg shadow-lg hover:bg-opacity-50 transition duration-200">
-      <img src={artist.artist_avatar} className="w-10 h-10 object-cover rounded-full" alt={artist.artist_name} />
-      <div className="flex flex-col flex-grow">
-        <h3 className="text-lg font-semibold">{artist.artist_name}</h3>
-      </div>
-    </li>
+    <Link 
+      to={`/artist/${artist.artist_id}`}
+      key={artist.artist_id}
+    >
+      <li className="flex items-center gap-4 p-4 bg-white bg-opacity-30 backdrop-blur-lg text-white rounded-lg shadow-lg hover:bg-opacity-50 transition duration-200">
+        <img src={artist.artist_avatar} className="w-10 h-10 object-cover rounded-full" alt={artist.artist_name} />
+        <div className="flex flex-col flex-grow">
+          <h3 className="text-lg font-semibold">{artist.artist_name}</h3>
+        </div>
+      </li>
+    </Link>
   );
-
+  
   const renderAlbum = (album: Album) => (
-    <li key={album.album_id} className="flex items-center gap-4 p-4 bg-white bg-opacity-30 backdrop-blur-lg text-white rounded-lg shadow-lg hover:bg-opacity-50 transition duration-200">
-      <img src={album.album_photo} className="w-10 h-10 object-cover" alt={album.album_article} />
-      <div className="flex flex-col flex-grow">
-        <h3 className="text-lg font-semibold">{album.album_article}</h3>
-      </div>
-    </li>
+    <Link 
+      to={`/album/${album.album_id}`}
+      key={album.album_id}
+    >
+      <li className="flex items-center gap-4 p-4 bg-white bg-opacity-30 backdrop-blur-lg text-white rounded-lg shadow-lg hover:bg-opacity-50 transition duration-200">
+        <img src={album.album_photo} className="w-10 h-10 object-cover" alt={album.album_article} />
+        <div className="flex flex-col flex-grow">
+          <h3 className="text-lg font-semibold">{album.album_article}</h3>
+        </div>
+      </li>
+    </Link>
   );
 
   return (
@@ -120,7 +136,7 @@ const Navigation = () => {
             <IoArrowBackOutline size={26} style={{ color: "white" }}/>
           </button>
           <div className="relative w-full">
-            <div onClick={handleSearch}>
+            <Link to="/search">
               <input
                 type="text"
                 className="p-4 pl-10 bg-black bg-opacity-40 text-white placeholder-gray-500 rounded-2xl shadow-inner focus:outline-none focus:ring-2 focus:ring-white w-full backdrop-blur-lg"
@@ -131,7 +147,7 @@ const Navigation = () => {
                 className="absolute left-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-white" 
                 size={20} 
               />
-            </div>
+            </Link>
           </div>
           <button className="p-3 bg-black bg-opacity-40 rounded-2xl transition duration-200 hidden md:flex">
             <PiBellRingingFill size={25} style={{ color: "white" }}/>

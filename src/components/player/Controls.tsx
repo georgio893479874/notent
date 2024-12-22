@@ -149,7 +149,7 @@ const Controls: React.FC<IControls> = ({
 
   return (
     <div 
-      className="controls lg:h-24 h-20 flex flex-col items-center justify-between p-4 bg-[#212121] text-white fixed lg:bottom-0 bottom-14 left-0 right-0 shadow-lg z-10"
+      className="lg:h-24 h-20 flex flex-col items-center justify-between p-4 bg-[#212121] text-white fixed lg:bottom-0 bottom-14 left-0 right-0 shadow-lg z-10"
       onClick={() => { setIsModalOpen(true) }}
     >
       <div className="flex items-center gap-4 fixed right-8 bottom-20 sm:relative sm:right-auto sm:bottom-auto">
@@ -198,7 +198,7 @@ const Controls: React.FC<IControls> = ({
         />
       </div>
       {song && (
-        <div className="sm:fixed block left-4 flex items-center gap-4 z-20 w-full">
+        <div className="sm:fixed left-4 flex items-center gap-4 z-20 w-full">
           <img
             src={song.image_link}
             className="lg:w-16 lg:h-16 w-12 h-12 rounded-sm"

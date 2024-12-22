@@ -103,15 +103,15 @@ const AvatarMenu = () => {
           horizontal: 'center',
         }}
       >
-        <MenuItem onClick={handleClose} className="text-black dark:text-white gap-2">
+        <MenuItem onClick={handleClose} className="gap-2">
           <RiAccountCircleLine className="w-5 h-5"/>
-          <Link to="/profile" className="text-black dark:text-white">My account</Link>
+          <Link to="/profile">My account</Link>
         </MenuItem>
-        <MenuItem onClick={handleClose} className="text-black dark:text-white gap-2">
+        <MenuItem onClick={handleClose} className="gap-2">
           <IoSettings className="w-5 h-5"/>
-          <Link to="/settings" className="text-black dark:text-white">Settings</Link>
+          <Link to="/settings">Settings</Link>
         </MenuItem>
-        <MenuItem onClick={handleSignOut} className="text-black dark:text-white gap-2">
+        <MenuItem onClick={handleSignOut} className="gap-2">
           <FiLogOut className='w-5 h-5'/>
           Logout
         </MenuItem>

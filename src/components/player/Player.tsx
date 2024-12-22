@@ -86,6 +86,7 @@ const Player: React.FC = () => {
           onChange={handleProgressChange}
           progressBar={progressBar}
           current={currentFormatted}
+          duration={durationFormatted}
         />
       )}
     </div>

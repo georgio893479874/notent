@@ -5,6 +5,7 @@ interface ISongInfoModal {
     skipBegin: () => void;
     skipEnd: () => void;
     current: string;
+    duration: string;
     type: string;
     min: number;
     max: number;
